@@ -10,11 +10,11 @@
     </parent>
 
     <groupId>net.wasdev.wlp.sample</groupId>
-    <artifactId>JavaHelloWorldApp</artifactId>
+    <artifactId>newsifier</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Liberty Profile Sample - Servlet</name>
+    <name>newsifier</name>
     <url>https://wasdev.github.io</url>
 
     <licenses>
@@ -52,7 +52,7 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <configuration>
                         <failOnMissingWebXml>false</failOnMissingWebXml>
-                        <warName>JavaHelloWorldApp</warName>
+                        <warName>newsifier</warName>
                     </configuration>
                 </plugin>
                 <plugin>
