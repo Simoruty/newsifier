@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface FeedDAO {
     void insertFeeds(List<Feed> feeds);
-    List<Feed> getFeeds();
+    List<Feed> getFeeds(Feed f);
 }

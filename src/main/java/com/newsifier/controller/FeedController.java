@@ -1,7 +1,10 @@
 package com.newsifier.controller;
 
+import com.newsifier.dao.impl.CloudantFeedDAO;
+
 import java.io.IOException;
 
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +22,12 @@ public class FeedController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         response.getWriter().print("Hello newsifier!");
+        try {
+            CloudantFeedDAO asd = new CloudantFeedDAO();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
