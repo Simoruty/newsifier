@@ -1,4 +1,4 @@
-package wasdev.sample.servlet;
+package com.newsifier.controller;
 
 import java.io.IOException;
 
@@ -8,11 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class SimpleServlet
- */
-@WebServlet("/SimpleServlet")
-public class SimpleServlet extends HttpServlet {
+@WebServlet("/feed")
+public class FeedController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
