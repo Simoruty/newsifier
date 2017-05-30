@@ -1,18 +1,17 @@
 package com.newsifier.rss.bean;
 
-import java.util.ArrayList;
+import java.net.URL;
 
-public class Feed {
-    //TODO POJO
+public class Feed{
     private String name;
-    private ArrayList<String> urls;
+    private URL url;
 
-    public ArrayList<String> getUrls() {
-        return urls;
+    public URL getUrl() {
+        return url;
     }
 
-    public void setUrls(ArrayList<String> urls) {
-        this.urls = urls;
+    public void setUrl(URL url) {
+        this.url = url;
     }
 
     public String getName() {
@@ -23,12 +22,31 @@ public class Feed {
         this.name = name;
     }
 
-    public Feed(String name, ArrayList<String> urls) {
+    public Feed(String name, URL url) {
         this.name = name;
-        this.urls = urls;
+        this.url = url;
     }
 
     public Feed(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Feed{" +
+                "name='" + name + '\'' +
+                ", url=" + url +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Feed feed = (Feed) o;
+
+        if (!name.equals(feed.name)) return false;
+        return url.equals(feed.url);
     }
 }
