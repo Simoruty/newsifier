@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static com.newsifier.dao.impl.Utils.getCredentials;
+
 public class CloudantUtilsDAO {
 
     private static Database db;
@@ -43,7 +45,7 @@ public class CloudantUtilsDAO {
     }
 
     private static CloudantClient getConnection() {
-        JsonObject credentials = getCredentials();
+        JsonObject credentials = getCredentials("cloudantNoSQLDB", USERNAME_DB, PASSWORD_DB);
 
         String username = credentials.get("username").getAsString();
         String password = credentials.get("password").getAsString();
@@ -78,44 +80,6 @@ public class CloudantUtilsDAO {
         // Create a new database.
         //client.createDB("example_db");
         db = client.database("newsifier_db", true);
-    }
-
-    /**
-     * For deployment
-     *
-     * @return credential JsonObject
-     */
-
-    private static JsonObject getCredentials() {
-        //for local deployment
-        if (System.getenv("VCAP_SERVICES") == null || System.getenv("VCAP_SERVICES").isEmpty()) {
-            return readProperties();
-        }
-
-        //for bluemix deployment
-        else {
-            JsonParser parser = new JsonParser();
-            JsonObject allServices = parser.parse(System.getenv("VCAP_SERVICES")).getAsJsonObject();
-            return ((JsonObject) allServices.getAsJsonArray("cloudantNoSQLDB").get(0)).getAsJsonObject("credentials");
-        }
-
-    }
-
-
-    /**
-     * For local deployment
-     *
-     * @return credential JsonObject
-     */
-    private static JsonObject readProperties() {
-
-        JsonObject credentialsJson = new JsonObject();
-
-        // set the JSONOBject with the USERNAME_DB and PASSWORD_DB
-        credentialsJson.addProperty("username", USERNAME_DB);
-        credentialsJson.addProperty("password", PASSWORD_DB);
-
-        return credentialsJson;
     }
 
 }

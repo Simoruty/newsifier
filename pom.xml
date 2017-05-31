@@ -66,6 +66,13 @@
             <version>1.7.25</version>
         </dependency>
 
+        <!-- Watson NLU maven repository -->
+        <dependency>
+            <groupId>com.ibm.watson.developer_cloud</groupId>
+            <artifactId>natural-language-understanding</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+
     </dependencies>
 
 

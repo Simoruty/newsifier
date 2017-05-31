@@ -5,6 +5,7 @@ import com.newsifier.dao.impl.CloudantNewsDAO;
 import com.newsifier.dao.interfaces.FeedDAO;
 import com.newsifier.dao.interfaces.NewsDAO;
 import com.newsifier.rss.bean.Feed;
+import com.newsifier.watson.Extractor;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,6 +44,8 @@ public class FeedController extends HttpServlet {
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
         cloudantNewsDAO.insertNews(feedsList);
 
+        Extractor e = new Extractor();
+        e.extractInfo("www.cnn.com");
     }
 
 }
