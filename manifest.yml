@@ -9,6 +9,5 @@ applications:
   services:
   - Natural Language Understanding-gq
   - Natural Language Classifier-2a
-  - Object Storage-h1
   - Cloudant NoSQL DB-wr
 
