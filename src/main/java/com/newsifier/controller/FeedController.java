@@ -4,16 +4,14 @@ import com.newsifier.dao.impl.CloudantFeedDAO;
 import com.newsifier.rss.bean.Feed;
 import com.newsifier.rss.reader.RssManager;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 
 @WebServlet("/feed")
 public class FeedController extends HttpServlet {
