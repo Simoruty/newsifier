@@ -45,8 +45,8 @@ public class CloudantUtilsDAO {
     private static CloudantClient getConnection() {
         JsonObject credentials = getCredentials();
 
-        String username = credentials.get("USERNAME_DB").getAsString();
-        String password = credentials.get("PASSWORD_DB").getAsString();
+        String username = credentials.get("username").getAsString();
+        String password = credentials.get("password").getAsString();
 
         try {
             CloudantClient client = ClientBuilder.url(new URL("https://" + username + ".cloudant.com"))
@@ -112,8 +112,8 @@ public class CloudantUtilsDAO {
         JsonObject credentialsJson = new JsonObject();
 
         // set the JSONOBject with the USERNAME_DB and PASSWORD_DB
-        credentialsJson.addProperty("USERNAME_DB", USERNAME_DB);
-        credentialsJson.addProperty("PASSWORD_DB", PASSWORD_DB);
+        credentialsJson.addProperty("username", USERNAME_DB);
+        credentialsJson.addProperty("password", PASSWORD_DB);
 
         return credentialsJson;
     }
