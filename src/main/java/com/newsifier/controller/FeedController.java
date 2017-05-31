@@ -1,8 +1,10 @@
 package com.newsifier.controller;
 
 import com.newsifier.dao.impl.CloudantFeedDAO;
+import com.newsifier.dao.impl.CloudantNewsDAO;
+import com.newsifier.dao.interfaces.FeedDAO;
+import com.newsifier.dao.interfaces.NewsDAO;
 import com.newsifier.rss.bean.Feed;
-import com.newsifier.rss.reader.RssManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,18 +28,20 @@ public class FeedController extends HttpServlet {
         response.getWriter().print("Hello newsifier!");
 
         ArrayList<Feed> feedsList = new ArrayList<>();
-        Feed f1 = new Feed("Ansa Cronaca",new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
-        Feed f2 = new Feed("Ansa Politica",new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
-        Feed f3 = new Feed("Ansa Calcio",new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
-        RssManager.printNews(f2);
+        Feed f1 = new Feed("Ansa Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
+        Feed f2 = new Feed("Ansa Politica", new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
+        Feed f3 = new Feed("Ansa Calcio", new URL("http://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml"));
+        //RssManager.printNews(f2);
 
         feedsList.add(f1);
         feedsList.add(f2);
         feedsList.add(f3);
 
-        CloudantFeedDAO cloudantFeedDAO = new CloudantFeedDAO();
+        FeedDAO cloudantFeedDAO = new CloudantFeedDAO();
         cloudantFeedDAO.insertFeeds(feedsList);
-        cloudantFeedDAO.getFeeds();
+
+        NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
+        cloudantNewsDAO.insertNews(feedsList);
 
     }
 

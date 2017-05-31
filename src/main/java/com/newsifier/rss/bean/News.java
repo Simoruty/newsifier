@@ -2,17 +2,8 @@ package com.newsifier.rss.bean;
 
 public class News {
 
-    private String feedName;
     private String title;
     private String uri;
-
-    public String getFeedName() {
-        return feedName;
-    }
-
-    public void setFeedName(String feedName) {
-        this.feedName = feedName;
-    }
 
     public String getTitle() {
         return title;
@@ -30,8 +21,7 @@ public class News {
         this.uri = uri;
     }
 
-    public News(String feedName, String title, String uri) {
-        this.feedName = feedName;
+    public News(String title, String uri) {
         this.title = title;
         this.uri = uri;
     }
@@ -39,9 +29,23 @@ public class News {
     @Override
     public String toString() {
         return "News{" +
-                "feedName='" + feedName + '\'' +
-                ", title='" + title + '\'' +
+                "title='" + title + '\'' +
                 ", uri='" + uri + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        News news = (News) o;
+
+        return uri.equals(news.uri);
+    }
+
+    @Override
+    public int hashCode() {
+        return uri.hashCode();
     }
 }

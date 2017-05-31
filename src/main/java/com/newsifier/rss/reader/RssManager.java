@@ -20,7 +20,7 @@ import java.util.List;
      public static void printNews(Feed f){
          ArrayList<News> newsFromFeed = (ArrayList<News>) readerNews(f);
          for (News news : newsFromFeed) {
-             System.out.println(news.getFeedName() + " Title: " + news.getTitle() + " url: "+news.getUri());
+             System.out.println(" Title: " + news.getTitle() + " url: "+news.getUri());
          }
 
      }
@@ -33,7 +33,7 @@ import java.util.List;
 
             ArrayList<SyndEntry> s = (ArrayList<SyndEntry>) feed.getEntries();
             for (SyndEntry syndEntry : s) {
-                newsArrayList.add(new News(f.getName(),syndEntry.getTitle(),syndEntry.getUri()));
+                newsArrayList.add(new News(syndEntry.getTitle(),syndEntry.getUri()));
             }
 
         } catch (FeedException e) {

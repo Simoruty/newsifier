@@ -39,6 +39,14 @@ public class Feed{
                 '}';
     }
 
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + url.hashCode();
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

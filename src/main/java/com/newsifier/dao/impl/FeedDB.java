@@ -4,7 +4,7 @@ import com.newsifier.rss.bean.Feed;
 
 import java.util.ArrayList;
 
-public class CloudantFeed {
+public class FeedDB {
 
     private String _id;
     private String _rev;
