@@ -15,7 +15,6 @@ public class CloudantFeedDAO implements FeedDAO {
     @Override
     public void insertFeeds(List<Feed> feeds) {
 
-        createConnectionWithDB();
         JsonObject cloudantFeeds = new JsonObject();
         cloudantFeeds.addProperty("_id", "Feeds");
         JsonArray feedsArr = new JsonArray();
@@ -27,6 +26,7 @@ public class CloudantFeedDAO implements FeedDAO {
             feedsArr.add(feedMap);
         }
         cloudantFeeds.add("feeds", feedsArr);
+        createConnectionWithDB();
 
         try {
             getDb().save(cloudantFeeds);
@@ -53,7 +53,7 @@ public class CloudantFeedDAO implements FeedDAO {
             //Save the updated document
             getDb().save(feedFromCloudant);
         }
-
+        closeConnectionWithDB();
     }
 
     @Override
@@ -63,6 +63,7 @@ public class CloudantFeedDAO implements FeedDAO {
 
         JsonObject read = jsonObjectreaderFromCloudantId("Feeds");
         FeedDB feedFromCloudant = new Gson().fromJson(read, FeedDB.class);
+        closeConnectionWithDB();
         return feedFromCloudant.getFeedslist();
     }
 

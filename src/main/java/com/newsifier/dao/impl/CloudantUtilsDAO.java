@@ -16,6 +16,7 @@ import static com.newsifier.dao.impl.Utils.getCredentials;
 public class CloudantUtilsDAO {
 
     private static Database db;
+    private static CloudantClient cloudantClient;
 
     protected static Database getDb() {
         return db;
@@ -51,11 +52,11 @@ public class CloudantUtilsDAO {
         String password = credentials.get("password").getAsString();
 
         try {
-            CloudantClient client = ClientBuilder.url(new URL("https://" + username + ".cloudant.com"))
+            cloudantClient = ClientBuilder.url(new URL("https://" + username + ".cloudant.com"))
                     .username(username)
                     .password(password)
                     .build();
-            return client;
+            return cloudantClient;
         } catch (MalformedURLException ex) {
             System.err.println(ex.getMessage());
         }
@@ -63,9 +64,15 @@ public class CloudantUtilsDAO {
         return null;
     }
 
-    protected static void createConnectionWithDB() {
+    public static void closeConnectionWithDB(){
+        cloudantClient.shutdown();
+    }
+
+    protected static boolean createConnectionWithDB() {
+
+        try{
         // Create a new CloudantClient instance
-        CloudantClient client = getConnection();
+        cloudantClient = getConnection();
 
         // Show the server version
         //System.out.println("Server Version: " + client.serverVersion());
@@ -78,8 +85,13 @@ public class CloudantUtilsDAO {
 //        }
 
         // Create a new database.
-        //client.createDB("example_db");
-        db = client.database("newsifier_db", true);
-    }
+        db = cloudantClient.database("newsifier_db", true);
+        return true;
+        }
+        catch (com.cloudant.client.org.lightcouch.CouchDbException ex){
+            System.err.println("Error retrieving server response");
+            return false;
+        }
 
+    }
 }

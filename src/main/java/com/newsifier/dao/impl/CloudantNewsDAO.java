@@ -10,15 +10,12 @@ import com.newsifier.rss.reader.RssManager;
 
 import java.util.List;
 
-import static com.newsifier.dao.impl.CloudantUtilsDAO.createConnectionWithDB;
-import static com.newsifier.dao.impl.CloudantUtilsDAO.getDb;
-import static com.newsifier.dao.impl.CloudantUtilsDAO.jsonObjectreaderFromCloudantId;
+import static com.newsifier.dao.impl.CloudantUtilsDAO.*;
 
 public class CloudantNewsDAO implements NewsDAO {
 
     @Override
     public void insertNews(List<News> newsList, Feed f) {
-        createConnectionWithDB();
         JsonObject cloudantNews = new JsonObject();
         cloudantNews.addProperty("_id", f.getName());
         JsonArray newsArray = new JsonArray();
@@ -30,6 +27,7 @@ public class CloudantNewsDAO implements NewsDAO {
             newsArray.add(newsMap);
         }
         cloudantNews.add("news", newsArray);
+        createConnectionWithDB();
 
         try {
             getDb().save(cloudantNews);
@@ -58,7 +56,7 @@ public class CloudantNewsDAO implements NewsDAO {
             System.out.println("Added new news for the feed " + f.getName() + " saved");
         }
 
-
+        closeConnectionWithDB();
     }
 
     @Override
@@ -74,6 +72,7 @@ public class CloudantNewsDAO implements NewsDAO {
 
         JsonObject read = jsonObjectreaderFromCloudantId(f.getName());
         NewsDB newsFromCloudant = new Gson().fromJson(read, NewsDB.class);
+        closeConnectionWithDB();
         return newsFromCloudant.getNewslist();
     }
 }

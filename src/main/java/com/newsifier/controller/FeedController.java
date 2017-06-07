@@ -69,38 +69,48 @@ public class FeedController extends HttpServlet {
         System.out.println(" ++++++++++++++++++++++++++++++++++++  \n\n");
 
 
+        for (Feed feed : feedsList) {
 
-        System.out.println("FEED: " + f1.getName() + "\n\n");
-        List<News> newsList = cloudantNewsDAO.getNews(f1);
 
-        //extract keywords from news
-        Extractor e = new Extractor(20);
-        ArrayList<NewsNLU> newsNLUArrayList = new ArrayList<>();
+            System.out.println("FEED: " + feed.getName() + "\n\n");
+            List<News> newsList = cloudantNewsDAO.getNews(feed);
 
-        for (News news : newsList) {
+            //extract keywords from news
+            Extractor e = new Extractor(20);
+            NewsNLU newsNLU;
 
-            System.out.println(new Timestamp(System.currentTimeMillis()) + " Start extraction info for news : " + news.getUri());
-            try {
-                newsNLUArrayList.add(e.extractInfo(news.getUri()));
-            } catch (ServiceResponseException exp){
-                if (exp.getStatusCode() > 400)
-                {
-                    System.err.println(" SERVICE ERROR " + exp.getStatusCode());
-                    break;
+            CategoriesDAO categoriesDAO = new CloudantCategoriesDAO();
+
+            for (News news : newsList) {
+
+                System.out.println(new Timestamp(System.currentTimeMillis()) + " Start extraction info for news : " + news.getUri());
+                try {
+
+                    // second parameter "score" is the threeshold for retrieve the categories
+                    // third parameter "relevance" is the threeshold for retrieve the keywords
+
+                    newsNLU = e.extractInfo(news.getUri(), 0.5, 0.5);
+                    categoriesDAO.insertCategories(newsNLU);
+
+                } catch (ServiceResponseException exp) {
+                    if (exp.getStatusCode() > 400) {
+                        System.err.println(" SERVICE ERROR " + exp.getStatusCode());
+                        break;
+                    }
                 }
+                System.out.println(new Timestamp(System.currentTimeMillis()) + " End extraction info for news : " + news.getUri());
             }
-            System.out.println(new Timestamp(System.currentTimeMillis()) + " End extraction info for news : " + news.getUri());
+
+/*
+            System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
+            System.out.println(" +++  CREATION CAT DOCUMENTS  +++++++  ");
+            System.out.println(" ++++++++++++++++++++++++++++++++++++  \n\n");
+
+
+            CategoriesDAO categoriesDAO = new CloudantCategoriesDAO();
+            categoriesDAO.insertCategories(newsNLUArrayList);
+*/
         }
-
-
-        System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
-        System.out.println(" +++  CREATION CAT DOCUMENTS  +++++++  ");
-        System.out.println(" ++++++++++++++++++++++++++++++++++++  \n\n");
-
-
-        CategoriesDAO categoriesDAO = new CloudantCategoriesDAO();
-        categoriesDAO.insertCategories(newsNLUArrayList);
-
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++  END  ++++++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++  \n\n");

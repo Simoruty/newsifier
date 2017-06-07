@@ -8,5 +8,8 @@ import java.util.List;
 
 public interface CategoriesDAO {
     void insertCategories(List<NewsNLU> news);
+
+    void insertCategories(NewsNLU news);
+
     List<NewsNLUByCat> getNewsbyCat(String cat);
 }

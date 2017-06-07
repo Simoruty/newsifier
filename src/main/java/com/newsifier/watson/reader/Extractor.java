@@ -15,8 +15,8 @@ public class Extractor {
     private NaturalLanguageUnderstanding service;
     private Features features;
 
-    private static final String USERNAME_NLU = "61ee67ae-0385-44d0-bcff-46c618ca3d44";
-    private static final String PASSWORD_NLU = "HrJqOhhtim5P" ;
+    private static final String USERNAME_NLU = "f8c49463-e66f-4864-b5b8-acd9dcd940a3";
+    private static final String PASSWORD_NLU = "PwweN7xJjFlZ" ;
 
     public Extractor(int limit) {
 
@@ -46,7 +46,7 @@ public class Extractor {
 
     }
 
-    public NewsNLU extractInfo(String urlNews) {
+    public NewsNLU extractInfo(String urlNews, double score, double relevance) {
 
         AnalyzeOptions parameters = new AnalyzeOptions.Builder()
                 .url(urlNews)
@@ -63,14 +63,18 @@ public class Extractor {
 
         for (CategoriesResult cat : cats) {
             //System.out.println("The category : " + cat.getLabel() + " with score " + cat.getScore());
-            categoriesLabel.add(cat.getLabel());
+            if (cat.getScore() > score) {
+                categoriesLabel.add(cat.getLabel());
+            }
         }
 
         List<KeywordsResult> keys = results.getKeywords();
 
         for (KeywordsResult key : keys) {
             //System.out.println("The keyword: " +key.getText() + " with score " + key.getRelevance());
-            keywordsLabel.add(key.getText());
+            if (key.getRelevance() > relevance) {
+                keywordsLabel.add(key.getText());
+            }
         }
 
         return new NewsNLU(urlNews,categoriesLabel,keywordsLabel);
