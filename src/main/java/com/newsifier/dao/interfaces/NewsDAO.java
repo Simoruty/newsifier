@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface NewsDAO {
     void insertNews(List<News> news, Feed f);
+
     List<News> getNews(Feed f);
 }

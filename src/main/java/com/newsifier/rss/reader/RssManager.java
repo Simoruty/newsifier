@@ -15,15 +15,15 @@ import java.util.List;
 /**
  * This class extracts the feed/news structure
  */
- public class RssManager {
+public class RssManager {
 
-     public static void printNews(Feed f){
-         ArrayList<News> newsFromFeed = (ArrayList<News>) readerNews(f, 100000000);
-         for (News news : newsFromFeed) {
-             System.out.println(" Title: " + news.getTitle() + " url: "+news.getUri());
-         }
+    public static void printNews(Feed f) {
+        ArrayList<News> newsFromFeed = (ArrayList<News>) readerNews(f, 100000000);
+        for (News news : newsFromFeed) {
+            System.out.println(" Title: " + news.getTitle() + " url: " + news.getUri());
+        }
 
-     }
+    }
 
 
     public static List<News> readerNews(Feed f, int limit) {
@@ -36,11 +36,9 @@ import java.util.List;
 
             ArrayList<SyndEntry> s = (ArrayList<SyndEntry>) feed.getEntries();
             for (SyndEntry syndEntry : s) {
-                if (i>limit)
-                {
+                if (i > limit) {
                     break;
-                }
-                else {
+                } else {
                     newsArrayList.add(new News(syndEntry.getTitle(), syndEntry.getUri()));
                     i++;
                 }

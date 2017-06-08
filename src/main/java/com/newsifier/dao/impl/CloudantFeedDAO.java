@@ -26,17 +26,17 @@ public class CloudantFeedDAO implements FeedDAO {
             feedsArr.add(feedMap);
         }
         cloudantFeeds.add("feeds", feedsArr);
-        createConnectionWithDB();
+        createConnectionWithDBMaster();
 
         try {
-            getDb().save(cloudantFeeds);
+            getDbMaster().save(cloudantFeeds);
             System.out.println("Created document Feeds saved");
 
 
         } catch (com.cloudant.client.org.lightcouch.DocumentConflictException e) {
 
             //Reading the existing document
-            JsonObject read = jsonObjectreaderFromCloudantId("Feeds");
+            JsonObject read = jsonObjectreaderFromCloudantId("Feeds", getDbMaster());
             FeedDB feedFromCloudant = new Gson().fromJson(read, FeedDB.class);
 
             //Added the new feed to existing list
@@ -45,25 +45,23 @@ public class CloudantFeedDAO implements FeedDAO {
             }
 
             //Remove old document
-            getDb().remove(read);
+            getDbMaster().remove(read);
 
             //Remove revision id for the new creation
             feedFromCloudant.set_rev(null);
 
             //Save the updated document
-            getDb().save(feedFromCloudant);
+            getDbMaster().save(feedFromCloudant);
         }
-        closeConnectionWithDB();
     }
 
     @Override
     public List<Feed> getFeeds() {
 
-        createConnectionWithDB();
+        createConnectionWithDBMaster();
 
-        JsonObject read = jsonObjectreaderFromCloudantId("Feeds");
+        JsonObject read = jsonObjectreaderFromCloudantId("Feeds", getDbMaster());
         FeedDB feedFromCloudant = new Gson().fromJson(read, FeedDB.class);
-        closeConnectionWithDB();
         return feedFromCloudant.getFeedslist();
     }
 

@@ -12,11 +12,10 @@ import static com.newsifier.dao.impl.Utils.getCredentials;
 
 public class Extractor {
 
+    private static final String USERNAME_NLU = "32040e43-3d63-49b5-b983-134bdef730bb";
+    private static final String PASSWORD_NLU = "Qm88hpJVDq0x";
     private NaturalLanguageUnderstanding service;
     private Features features;
-
-    private static final String USERNAME_NLU = "32040e43-3d63-49b5-b983-134bdef730bb";
-    private static final String PASSWORD_NLU = "Qm88hpJVDq0x" ;
 
     public Extractor(int limit) {
 
@@ -25,7 +24,7 @@ public class Extractor {
         String username = credentials.get("username").getAsString();
         String password = credentials.get("password").getAsString();
 
-         service = new NaturalLanguageUnderstanding(
+        service = new NaturalLanguageUnderstanding(
                 NaturalLanguageUnderstanding.VERSION_DATE_2017_02_27,
                 username,
                 password
@@ -64,7 +63,7 @@ public class Extractor {
         for (CategoriesResult cat : cats) {
             //System.out.println("The category : " + cat.getLabel() + " with score " + cat.getScore());
             if (cat.getScore() > score) {
-                categoriesLabel.add(cat.getLabel().replaceAll("\\s+","_"));
+                categoriesLabel.add(cat.getLabel().replaceAll("\\s+", "_"));
             }
         }
 
@@ -77,6 +76,6 @@ public class Extractor {
             }
         }
 
-        return new NewsNLU(urlNews,categoriesLabel,keywordsLabel);
+        return new NewsNLU(urlNews, categoriesLabel, keywordsLabel);
     }
 }

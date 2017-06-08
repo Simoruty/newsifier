@@ -30,8 +30,8 @@ public class FeedDB {
         this.feeds = feeds;
     }
 
-    public void addFeed(Feed f){
-        if (!feeds.contains(f)){
+    public void addFeed(Feed f) {
+        if (!feeds.contains(f)) {
             feeds.add(f);
         }
     }

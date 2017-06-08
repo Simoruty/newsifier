@@ -29,8 +29,8 @@ public class CategoriesDB {
         this.news = news;
     }
 
-    public void addNews(NewsNLUByCat n){
-        if (!news.contains(n)){
+    public void addNews(NewsNLUByCat n) {
+        if (!news.contains(n)) {
             news.add(n);
         }
     }

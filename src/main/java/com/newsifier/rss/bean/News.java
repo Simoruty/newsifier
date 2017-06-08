@@ -5,6 +5,11 @@ public class News {
     private String title;
     private String uri;
 
+    public News(String title, String uri) {
+        this.title = title;
+        this.uri = uri;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -18,11 +23,6 @@ public class News {
     }
 
     public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    public News(String title, String uri) {
-        this.title = title;
         this.uri = uri;
     }
 

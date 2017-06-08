@@ -12,4 +12,8 @@ public interface CategoriesDAO {
     void insertCategories(NewsNLU news);
 
     List<NewsNLUByCat> getNewsbyCat(String cat);
+
+    String newsToCSV(String cat);
+
+    List<String> allCategories();
 }

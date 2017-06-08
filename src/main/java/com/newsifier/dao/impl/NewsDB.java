@@ -30,8 +30,8 @@ public class NewsDB {
         this.news = news;
     }
 
-    public void addNews(News n){
-        if (!news.contains(n)){
+    public void addNews(News n) {
+        if (!news.contains(n)) {
             news.add(n);
         }
     }

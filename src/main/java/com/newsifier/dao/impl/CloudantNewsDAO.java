@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.newsifier.dao.interfaces.NewsDAO;
 import com.newsifier.rss.bean.Feed;
 import com.newsifier.rss.bean.News;
-import com.newsifier.rss.reader.RssManager;
 
 import java.util.List;
 
@@ -27,16 +26,16 @@ public class CloudantNewsDAO implements NewsDAO {
             newsArray.add(newsMap);
         }
         cloudantNews.add("news", newsArray);
-        createConnectionWithDB();
+        createConnectionWithDBMaster();
 
         try {
-            getDb().save(cloudantNews);
+            getDbMaster().save(cloudantNews);
             System.out.println("Created document news for the feed " + f.getName() + " saved");
 
         } catch (com.cloudant.client.org.lightcouch.DocumentConflictException e) {
 
             //Reading the existing document
-            JsonObject read = jsonObjectreaderFromCloudantId(f.getName());
+            JsonObject read = jsonObjectreaderFromCloudantId(f.getName(), getDbMaster());
             NewsDB newsFromCloudant = new Gson().fromJson(read, NewsDB.class);
 
             //Added the new feed to existing list
@@ -45,27 +44,24 @@ public class CloudantNewsDAO implements NewsDAO {
             }
 
             //Remove old document
-            getDb().remove(read);
+            getDbMaster().remove(read);
 
             //Remove revision id for the new creation
             newsFromCloudant.set_rev(null);
 
             //Save the updated document
-            getDb().save(newsFromCloudant);
+            getDbMaster().save(newsFromCloudant);
 
             System.out.println("Added new news for the feed " + f.getName() + " saved");
         }
-
-        closeConnectionWithDB();
     }
 
     @Override
     public List<News> getNews(Feed f) {
-        createConnectionWithDB();
+        createConnectionWithDBMaster();
 
-        JsonObject read = jsonObjectreaderFromCloudantId(f.getName());
+        JsonObject read = jsonObjectreaderFromCloudantId(f.getName(), getDbMaster());
         NewsDB newsFromCloudant = new Gson().fromJson(read, NewsDB.class);
-        closeConnectionWithDB();
         return newsFromCloudant.getNewslist();
     }
 }

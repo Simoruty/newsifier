@@ -2,9 +2,18 @@ package com.newsifier.rss.bean;
 
 import java.net.URL;
 
-public class Feed{
+public class Feed {
     private String name;
     private URL url;
+
+    public Feed(String name, URL url) {
+        this.name = name;
+        this.url = url;
+    }
+
+    public Feed(String name) {
+        this.name = name;
+    }
 
     public URL getUrl() {
         return url;
@@ -19,15 +28,6 @@ public class Feed{
     }
 
     public void setName(String name) {
-        this.name = name;
-    }
-
-    public Feed(String name, URL url) {
-        this.name = name;
-        this.url = url;
-    }
-
-    public Feed(String name) {
         this.name = name;
     }
 

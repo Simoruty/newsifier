@@ -3,6 +3,7 @@ package com.newsifier.dao.impl;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+
 public class Utils {
 
     /**

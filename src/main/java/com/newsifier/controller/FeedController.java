@@ -10,8 +10,8 @@ import com.newsifier.dao.interfaces.NewsDAO;
 import com.newsifier.rss.bean.Feed;
 import com.newsifier.rss.bean.News;
 import com.newsifier.rss.reader.RssManager;
-import com.newsifier.watson.reader.Extractor;
 import com.newsifier.watson.bean.NewsNLU;
+import com.newsifier.watson.reader.Extractor;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -65,7 +65,7 @@ public class FeedController extends HttpServlet {
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
 
         for (Feed feed : feedsList) {
-            cloudantNewsDAO.insertNews(RssManager.readerNews(feed, 20000), feed);
+            cloudantNewsDAO.insertNews(RssManager.readerNews(feed, 1), feed);
         }
 
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
@@ -105,7 +105,17 @@ public class FeedController extends HttpServlet {
                 }
                 System.out.println(new Timestamp(System.currentTimeMillis()) + " End extraction info for news : " + news.getUri());
             }
+
+
+            System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
+            System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
+
+            for (String category : categoriesDAO.allCategories()) {
+                System.out.println(categoriesDAO.newsToCSV(category));
+            }
         }
+
+
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++  END  ++++++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++  \n\n");
