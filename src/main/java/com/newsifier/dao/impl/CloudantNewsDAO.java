@@ -60,9 +60,9 @@ public class CloudantNewsDAO implements NewsDAO {
     }
 
     @Override
-    public void insertNews(List<Feed> f) {
+    public void insertNews(List<Feed> f, int limit) {
         for (Feed feed : f) {
-            insertNews(RssManager.readerNews(feed), feed);
+            insertNews(RssManager.readerNews(feed, limit), feed);
         }
     }
 

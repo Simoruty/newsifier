@@ -92,6 +92,5 @@ public class CloudantUtilsDAO {
             System.err.println("Error retrieving server response");
             return false;
         }
-
     }
 }

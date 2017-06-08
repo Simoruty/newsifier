@@ -53,7 +53,9 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
             }
 
             try {
+
                 getDb().save(cloudantCats);
+
                 closeConnectionWithDB();
                 System.out.println("Created document Categories " + cat + " saved");
 
@@ -72,11 +74,17 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
                 //Remove revision id for the new creation
                 newsFromCloudant.set_rev(null);
 
-                //Save the updated document
-                getDb().save(newsFromCloudant);
-
-                closeConnectionWithDB();
-                System.out.println("Added new news keywords for the class " + cat + " saved");
+                try {
+                    //Save the updated document
+                    getDb().save(newsFromCloudant);
+                    System.out.println("Added new news keywords for the category " + cat + " saved");
+                }
+                catch (com.cloudant.client.org.lightcouch.CouchDbException e1){
+                    System.err.println(e1.getMessage());
+                }
+                finally {
+                    closeConnectionWithDB();
+                }
             }
 
         }

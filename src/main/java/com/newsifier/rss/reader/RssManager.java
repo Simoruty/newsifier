@@ -18,14 +18,17 @@ import java.util.List;
  public class RssManager {
 
      public static void printNews(Feed f){
-         ArrayList<News> newsFromFeed = (ArrayList<News>) readerNews(f);
+         ArrayList<News> newsFromFeed = (ArrayList<News>) readerNews(f, 100000000);
          for (News news : newsFromFeed) {
              System.out.println(" Title: " + news.getTitle() + " url: "+news.getUri());
          }
 
      }
 
-    public static List<News> readerNews(Feed f) {
+
+    public static List<News> readerNews(Feed f, int limit) {
+
+        int i = 1;
         ArrayList<News> newsArrayList = new ArrayList<>();
         try {
             SyndFeedInput input = new SyndFeedInput();
@@ -33,7 +36,14 @@ import java.util.List;
 
             ArrayList<SyndEntry> s = (ArrayList<SyndEntry>) feed.getEntries();
             for (SyndEntry syndEntry : s) {
-                newsArrayList.add(new News(syndEntry.getTitle(),syndEntry.getUri()));
+                if (i>limit)
+                {
+                    break;
+                }
+                else {
+                    newsArrayList.add(new News(syndEntry.getTitle(), syndEntry.getUri()));
+                    i++;
+                }
             }
 
         } catch (FeedException e) {

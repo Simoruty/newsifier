@@ -15,8 +15,8 @@ public class Extractor {
     private NaturalLanguageUnderstanding service;
     private Features features;
 
-    private static final String USERNAME_NLU = "f8c49463-e66f-4864-b5b8-acd9dcd940a3";
-    private static final String PASSWORD_NLU = "PwweN7xJjFlZ" ;
+    private static final String USERNAME_NLU = "32040e43-3d63-49b5-b983-134bdef730bb";
+    private static final String PASSWORD_NLU = "Qm88hpJVDq0x" ;
 
     public Extractor(int limit) {
 
@@ -64,7 +64,7 @@ public class Extractor {
         for (CategoriesResult cat : cats) {
             //System.out.println("The category : " + cat.getLabel() + " with score " + cat.getScore());
             if (cat.getScore() > score) {
-                categoriesLabel.add(cat.getLabel());
+                categoriesLabel.add(cat.getLabel().replaceAll("\\s+","_"));
             }
         }
 

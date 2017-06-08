@@ -60,8 +60,9 @@ public class FeedController extends HttpServlet {
         System.out.println(" ++++++++++++++++++++++++++++++++++++  \n");
 
         // Adding news documents by feed
+        // Set limit news for feed
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
-        cloudantNewsDAO.insertNews(feedsList);
+        cloudantNewsDAO.insertNews(feedsList, 20000);
 
 
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");

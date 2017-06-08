@@ -7,7 +7,6 @@ applications:
   host: newsifier
   disk_quota: 1024M
   services:
-  - Natural Language Understanding-gq
   - Natural Language Classifier-2a
   - Cloudant NoSQL DB-wr
 
