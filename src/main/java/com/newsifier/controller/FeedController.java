@@ -9,6 +9,7 @@ import com.newsifier.dao.interfaces.FeedDAO;
 import com.newsifier.dao.interfaces.NewsDAO;
 import com.newsifier.rss.bean.Feed;
 import com.newsifier.rss.bean.News;
+import com.newsifier.rss.reader.RssManager;
 import com.newsifier.watson.reader.Extractor;
 import com.newsifier.watson.bean.NewsNLU;
 
@@ -62,8 +63,10 @@ public class FeedController extends HttpServlet {
         // Adding news documents by feed
         // Set limit news for feed
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
-        cloudantNewsDAO.insertNews(feedsList, 20000);
 
+        for (Feed feed : feedsList) {
+            cloudantNewsDAO.insertNews(RssManager.readerNews(feed, 20000), feed);
+        }
 
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" ++++++  EXTRACTOR NLU  +++++++++++++  ");
@@ -72,8 +75,9 @@ public class FeedController extends HttpServlet {
 
         for (Feed feed : feedsList) {
 
-
-            System.out.println("FEED: " + feed.getName() + "\n\n");
+            System.out.println("\n\n ----------------------------------  ");
+            System.out.println(" ---  FEED: " + feed.getName());
+            System.out.println(" ---------------------------------- \n\n");
             List<News> newsList = cloudantNewsDAO.getNews(feed);
 
             //extract keywords from news
@@ -101,16 +105,6 @@ public class FeedController extends HttpServlet {
                 }
                 System.out.println(new Timestamp(System.currentTimeMillis()) + " End extraction info for news : " + news.getUri());
             }
-
-/*
-            System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
-            System.out.println(" +++  CREATION CAT DOCUMENTS  +++++++  ");
-            System.out.println(" ++++++++++++++++++++++++++++++++++++  \n\n");
-
-
-            CategoriesDAO categoriesDAO = new CloudantCategoriesDAO();
-            categoriesDAO.insertCategories(newsNLUArrayList);
-*/
         }
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++  END  ++++++++++++++++++  ");
