@@ -28,6 +28,21 @@ public class Utils {
     }
 
 
+    public static JsonObject getCredentials(String serviceName, String usrId, String pwd, String domainId, String domainName, String projectId, String projectName, String authUrl) {
+        //for local deployment
+        if (System.getenv("VCAP_SERVICES") == null || System.getenv("VCAP_SERVICES").isEmpty()) {
+            return readProperties(usrId, pwd, domainId, domainName, projectId, projectName, authUrl);
+        }
+
+        //for bluemix deployment
+        else {
+            JsonParser parser = new JsonParser();
+            JsonObject allServices = parser.parse(System.getenv("VCAP_SERVICES")).getAsJsonObject();
+            return ((JsonObject) allServices.getAsJsonArray(serviceName).get(0)).getAsJsonObject("credentials");
+        }
+
+    }
+
     /**
      * For local deployment
      *
@@ -40,6 +55,21 @@ public class Utils {
         // set the JSONOBject with the username and password
         credentialsJson.addProperty("username", username);
         credentialsJson.addProperty("password", pwd);
+
+        return credentialsJson;
+    }
+
+    private static JsonObject readProperties(String usrId, String pwd, String domainId, String domainName, String projectId, String projectName, String authUrl) {
+        JsonObject credentialsJson = new JsonObject();
+
+        // set the JSONOBject with the username and password
+        credentialsJson.addProperty("userId", usrId);
+        credentialsJson.addProperty("password", pwd);
+        credentialsJson.addProperty("auth_url", authUrl);
+        credentialsJson.addProperty("domainName", domainName);
+        credentialsJson.addProperty("domainId", domainId);
+        credentialsJson.addProperty("projectId", projectId);
+        credentialsJson.addProperty("project", projectName);
 
         return credentialsJson;
     }

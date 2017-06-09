@@ -4,7 +4,9 @@ import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException
 import com.newsifier.dao.impl.CloudantCategoriesDAO;
 import com.newsifier.dao.impl.CloudantFeedDAO;
 import com.newsifier.dao.impl.CloudantNewsDAO;
+import com.newsifier.dao.impl.ObjectStorageDatasetDAO;
 import com.newsifier.dao.interfaces.CategoriesDAO;
+import com.newsifier.dao.interfaces.DatasetDAO;
 import com.newsifier.dao.interfaces.FeedDAO;
 import com.newsifier.dao.interfaces.NewsDAO;
 import com.newsifier.rss.bean.Feed;
@@ -36,6 +38,8 @@ public class FeedController extends HttpServlet {
         response.setContentType("text/html");
         response.getWriter().print("Hello newsifier!");
 
+
+        /*
 
         ArrayList<Feed> feedsList = new ArrayList<>();
         Feed f1 = new Feed("Ansa Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
@@ -115,6 +119,10 @@ public class FeedController extends HttpServlet {
             }
         }
 
+*/
+
+        DatasetDAO o = new ObjectStorageDatasetDAO();
+        o.getDataset("filesDataset", "testFile.csv");
 
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++  END  ++++++++++++++++++  ");
