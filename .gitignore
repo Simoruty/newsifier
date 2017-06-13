@@ -35,3 +35,10 @@ hs_err_pid*
 src/.DS_Store
 src/main/.DS_Store
 src/main/java/.DS_Store
+/.apt_generated/
+
+#Eclipse files
+.factorypath
+WebContent/
+bin/
+
