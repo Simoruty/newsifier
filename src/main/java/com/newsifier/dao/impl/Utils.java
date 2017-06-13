@@ -28,10 +28,10 @@ public class Utils {
     }
 
 
-    public static JsonObject getCredentials(String serviceName, String usrId, String pwd, String domainId, String domainName, String projectId, String projectName, String authUrl) {
+    public static JsonObject getCredentials(String serviceName, String usrId, String usrName, String pwd, String domainId, String domainName, String projectId, String projectName, String authUrl, String region, String role) {
         //for local deployment
         if (System.getenv("VCAP_SERVICES") == null || System.getenv("VCAP_SERVICES").isEmpty()) {
-            return readProperties(usrId, pwd, domainId, domainName, projectId, projectName, authUrl);
+            return readProperties(usrId, usrName, pwd, domainId, domainName, projectId, projectName, authUrl, region, role);
         }
 
         //for bluemix deployment
@@ -59,17 +59,20 @@ public class Utils {
         return credentialsJson;
     }
 
-    private static JsonObject readProperties(String usrId, String pwd, String domainId, String domainName, String projectId, String projectName, String authUrl) {
+    private static JsonObject readProperties(String usrId, String usrName, String pwd, String domainId, String domainName, String projectId, String projectName, String authUrl, String region, String role) {
         JsonObject credentialsJson = new JsonObject();
 
         // set the JSONOBject with the username and password
         credentialsJson.addProperty("userId", usrId);
+        credentialsJson.addProperty("username", usrName);
         credentialsJson.addProperty("password", pwd);
         credentialsJson.addProperty("auth_url", authUrl);
         credentialsJson.addProperty("domainName", domainName);
         credentialsJson.addProperty("domainId", domainId);
         credentialsJson.addProperty("projectId", projectId);
         credentialsJson.addProperty("project", projectName);
+        credentialsJson.addProperty("region", region);
+        credentialsJson.addProperty("role", role);
 
         return credentialsJson;
     }

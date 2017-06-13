@@ -39,12 +39,10 @@ public class FeedController extends HttpServlet {
         response.getWriter().print("Hello newsifier!");
 
 
-        /*
-
         ArrayList<Feed> feedsList = new ArrayList<>();
-        Feed f1 = new Feed("Ansa Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
-        Feed f2 = new Feed("Ansa Politica", new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
-        Feed f3 = new Feed("Ansa Calcio", new URL("http://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml"));
+        Feed f1 = new Feed("Ansa_Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
+        Feed f2 = new Feed("Ansa_Politica", new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
+        Feed f3 = new Feed("Ansa_Calcio", new URL("http://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml"));
         //RssManager.printNews(f2);
 
         feedsList.add(f1);
@@ -112,17 +110,31 @@ public class FeedController extends HttpServlet {
 
 
             System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
+            System.out.println(" +++++++ OBJECT STORAGE +++++++++++++  ");
             System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
 
+            StringBuilder stringCSV = new StringBuilder();
+
             for (String category : categoriesDAO.allCategories()) {
+                stringCSV.append(categoriesDAO.newsToCSV(category));
                 System.out.println(categoriesDAO.newsToCSV(category));
             }
+            DatasetDAO o = new ObjectStorageDatasetDAO();
+            o.saveDataset(stringCSV.toString(), "filesDataset", feed.getName() + ".csv");
+
+
+
+            System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
+            System.out.println(" +++++++++++++ NLC ++++++++++++++++++  ");
+            System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
+
+            String datasetCSV = o.getDataset("filesDataset", feed.getName() + ".csv");
+
+            System.out.println("Content : " + datasetCSV);
+
+
         }
 
-*/
-
-        DatasetDAO o = new ObjectStorageDatasetDAO();
-        o.getDataset("filesDataset", "testFile.csv");
 
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++  END  ++++++++++++++++++  ");
