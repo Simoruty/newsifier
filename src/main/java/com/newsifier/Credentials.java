@@ -4,8 +4,8 @@ public class Credentials {
 
     // natural-language-classifier Credential
 
-    private static final String USERNAME_NLC = "54755500-2b59-4aac-86a8-d15fb58a56fc";
-    private static final String PASSWORD_NLC = "N1dTkoikwNkq";
+    private static final String USERNAME_NLC = "f227a78a-df32-4809-acc8-b9d90c50f619";
+    private static final String PASSWORD_NLC = "Egdzg8WrerLO";
 
     public static String getUsernameNlc() {
         return USERNAME_NLC;

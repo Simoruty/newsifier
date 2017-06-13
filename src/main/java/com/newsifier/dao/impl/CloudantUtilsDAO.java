@@ -1,18 +1,21 @@
 package com.newsifier.dao.impl;
 
+import static com.newsifier.dao.impl.Utils.getCredentials;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
 import com.cloudant.client.api.ClientBuilder;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.newsifier.Credentials;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import static com.newsifier.dao.impl.Utils.getCredentials;
 
 public class CloudantUtilsDAO {
 
@@ -31,11 +34,12 @@ public class CloudantUtilsDAO {
     protected static JsonObject jsonObjectreaderFromCloudantId(String id, Database d) {
         JsonObject output;
         InputStream is = d.find(id);
+        BufferedReader in = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         int i;
         char c;
         String doc = "";
         try {
-            while ((i = is.read()) != -1) {
+            while ((i = in.read()) != -1) {
                 c = (char) i;
                 doc += c;
             }

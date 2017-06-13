@@ -56,6 +56,7 @@ public class FeedController extends HttpServlet {
 
         // Adding feeds document
         FeedDAO cloudantFeedDAO = new CloudantFeedDAO();
+        
         cloudantFeedDAO.insertFeeds(feedsList);
 
 
@@ -68,7 +69,7 @@ public class FeedController extends HttpServlet {
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
 
         for (Feed feed : feedsList) {
-            cloudantNewsDAO.insertNews(RssManager.readerNews(feed, 1), feed);
+            cloudantNewsDAO.insertNews(RssManager.readerNews(feed, 10), feed);
         }
 
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
