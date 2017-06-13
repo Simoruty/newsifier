@@ -3,6 +3,7 @@ package com.newsifier.watson.reader;
 import com.google.gson.JsonObject;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.*;
+import com.newsifier.Credentials;
 import com.newsifier.watson.bean.NewsNLU;
 
 import java.util.ArrayList;
@@ -12,14 +13,12 @@ import static com.newsifier.dao.impl.Utils.getCredentials;
 
 public class Extractor {
 
-    private static final String USERNAME_NLU = "32040e43-3d63-49b5-b983-134bdef730bb";
-    private static final String PASSWORD_NLU = "Qm88hpJVDq0x";
     private NaturalLanguageUnderstanding service;
     private Features features;
 
     public Extractor(int limit) {
 
-        JsonObject credentials = getCredentials("natural-language-understanding", USERNAME_NLU, PASSWORD_NLU);
+        JsonObject credentials = getCredentials("natural-language-understanding", Credentials.getUsernameNlu(), Credentials.getPasswordNlu());
 
         String username = credentials.get("username").getAsString();
         String password = credentials.get("password").getAsString();

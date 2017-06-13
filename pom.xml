@@ -91,6 +91,13 @@
             <version>2.4</version>
         </dependency>
 
+        <!-- Watson NLC maven repository -->
+        <dependency>
+            <groupId>com.ibm.watson.developer_cloud</groupId>
+            <artifactId>natural-language-classifier</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+
     </dependencies>
 
 

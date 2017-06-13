@@ -13,6 +13,7 @@ import com.newsifier.rss.bean.Feed;
 import com.newsifier.rss.bean.News;
 import com.newsifier.rss.reader.RssManager;
 import com.newsifier.watson.bean.NewsNLU;
+import com.newsifier.watson.reader.ClassifierNLC;
 import com.newsifier.watson.reader.Extractor;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
@@ -38,7 +40,7 @@ public class FeedController extends HttpServlet {
         response.setContentType("text/html");
         response.getWriter().print("Hello newsifier!");
 
-
+/*
         ArrayList<Feed> feedsList = new ArrayList<>();
         Feed f1 = new Feed("Ansa_Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
         Feed f2 = new Feed("Ansa_Politica", new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
@@ -123,17 +125,23 @@ public class FeedController extends HttpServlet {
             o.saveDataset(stringCSV.toString(), "filesDataset", feed.getName() + ".csv");
 
 
-
             System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
             System.out.println(" +++++++++++++ NLC ++++++++++++++++++  ");
             System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
 
-            String datasetCSV = o.getDataset("filesDataset", feed.getName() + ".csv");
-
-            System.out.println("Content : " + datasetCSV);
+            File f = o.getDatasetFile("filesDataset", feed.getName() + ".csv");
+            ClassifierNLC classifierNLC = new ClassifierNLC();
+            classifierNLC.createClassifier(f);
 
 
         }
+
+
+        */
+        DatasetDAO o = new ObjectStorageDatasetDAO();
+        File f = o.getDatasetFile("filesDataset", "Ansa_Cronaca.csv");
+        ClassifierNLC classifierNLC = new ClassifierNLC();
+        classifierNLC.createClassifier(f);
 
 
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");

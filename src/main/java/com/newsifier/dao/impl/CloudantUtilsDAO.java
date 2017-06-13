@@ -5,6 +5,7 @@ import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.newsifier.Credentials;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,9 +16,6 @@ import static com.newsifier.dao.impl.Utils.getCredentials;
 
 public class CloudantUtilsDAO {
 
-    // Credential Cloudant
-    private static final String USERNAME_DB = "0eb7cef6-2fbb-45c5-8e21-ca56349b4870-bluemix";
-    private static final String PASSWORD_DB = "c8e8913e64a247ae74fa0e90339335a27ed63044331d16cefdbb1138ea5739f7";
     private static Database dbMaster;
     private static Database dbCategories;
     private static CloudantClient cloudantClient;
@@ -49,8 +47,8 @@ public class CloudantUtilsDAO {
         return output;
     }
 
-    private static CloudantClient getConnection() {
-        JsonObject credentials = getCredentials("cloudantNoSQLDB", USERNAME_DB, PASSWORD_DB);
+    private static CloudantClient getCloudantClient() {
+        JsonObject credentials = getCredentials("cloudantNoSQLDB", Credentials.getUsernameDbCloudant(), Credentials.getPasswordDbCloudant());
 
         String username = credentials.get("username").getAsString();
         String password = credentials.get("password").getAsString();
@@ -68,17 +66,11 @@ public class CloudantUtilsDAO {
         return null;
     }
 
-    /*
-    public static void closeConnectionClient() {
-        cloudantClient.shutdown();
-    }
-    */
-
     protected static boolean createConnectionWithDBMaster() {
 
         try {
             // Create a new CloudantClient instance
-            cloudantClient = getConnection();
+            cloudantClient = getCloudantClient();
 
             // Show the server version
             //System.out.println("Server Version: " + client.serverVersion());
@@ -103,7 +95,7 @@ public class CloudantUtilsDAO {
 
         try {
             // Create a new CloudantClient instance
-            cloudantClient = getConnection();
+            cloudantClient = getCloudantClient();
 
             // Create a new database.
             dbCategories = cloudantClient.database("newsifier_db_categories", true);

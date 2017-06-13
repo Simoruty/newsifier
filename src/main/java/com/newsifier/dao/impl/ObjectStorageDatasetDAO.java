@@ -1,6 +1,7 @@
 package com.newsifier.dao.impl;
 
 import com.google.gson.JsonObject;
+import com.newsifier.Credentials;
 import com.newsifier.dao.interfaces.DatasetDAO;
 import org.openstack4j.api.OSClient;
 import org.openstack4j.api.storage.ObjectStorageService;
@@ -17,21 +18,9 @@ import static com.newsifier.dao.impl.Utils.getCredentials;
 
 public class ObjectStorageDatasetDAO implements DatasetDAO {
 
-    //Get these credentials from Bluemix by going to your Object Storage service, and clicking on Service Credentials:
-    private static final String USERIDOBJ = "7627741b299f4541afbc3e18ee62e498";
-    private static final String USERNAMEOBJ = "admin_2d7a1f0c87bc98e2c6a7935a9e0227ed94e2a83c";
-    private static final String PASSWORDOBJ = "vSSlx(.u3et/SA5b";
-    private static final String DOMAIN_ID = "26987fab99a847c89125147af010e28d";
-    private static final String DOMAIN_NAME = "795153";
-    private static final String PROJECT_ID = "36d1d6cdd212453a9de944badb87f22f";
-    private static final String PROJECT = "object_storage_cd39e834_ad71_41a9_b117_84e9d0ea9801";
-    private static final String AUTH_URL = "https://lon-identity.open.softlayer.com";
-    private static final String REGION = "london";
-    private static final String ROLE = "admin";
-
     private ObjectStorageService authenticateAndGetObjectStorageService() {
 
-        JsonObject credentials = getCredentials("Object-Storage", USERIDOBJ, USERNAMEOBJ, PASSWORDOBJ, DOMAIN_ID, DOMAIN_NAME, PROJECT_ID, PROJECT, AUTH_URL, REGION, ROLE);
+        JsonObject credentials = getCredentials("Object-Storage", Credentials.getUseridObj(), Credentials.getUsernameObj(), Credentials.getPasswordObj(), Credentials.getDomainIdObj(), Credentials.getDomainNameObj(), Credentials.getProjectIdObj(), Credentials.getProjectObj(), Credentials.getAuthUrlObj(), Credentials.getRegionObj(), Credentials.getRoleObj());
 
         String userId = credentials.get("userId").getAsString();
         String userName = credentials.get("username").getAsString();
@@ -59,7 +48,6 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
     @Override
     public String getDataset(String containerName, String fileName) {
 
-
         ObjectStorageService objectStorage = authenticateAndGetObjectStorageService();
 
         System.out.println("Retrieving file from Object Storage...");
@@ -86,6 +74,32 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
         System.out.println("Successfully retrieved file from Object Storage!");
 
         return outp;
+    }
+
+    @Override
+    public File getDatasetFile(String containerName, String fileName) {
+
+        ObjectStorageService objectStorage = authenticateAndGetObjectStorageService();
+
+        System.out.println("Retrieving file from Object Storage...");
+
+        SwiftObject fileObj = objectStorage.objects().get(containerName, fileName);
+
+        if (fileObj == null) { //The specified file was not found
+            System.out.println("File not found.");
+            return null;
+        }
+
+        DLPayload payload = fileObj.download();
+
+        File file = new File(fileName + ".csv");
+        try {
+            payload.writeToFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return file;
     }
 
 
