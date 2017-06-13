@@ -108,8 +108,6 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
         return csvFile.toString();
     }
 
-
-    //TODO
     @Override
     public List<String> allCategories() {
 
