@@ -69,8 +69,8 @@ public class Extractor {
         List<KeywordsResult> keys = results.getKeywords();
 
         for (KeywordsResult key : keys) {
-            //System.out.println("The keyword: " +key.getText() + " with score " + key.getRelevance());
             if (key.getRelevance() > relevance) {
+                System.out.println("The keyword: " + key.getText() + " with score " + key.getRelevance());
                 keywordsLabel.add(key.getText());
             }
         }

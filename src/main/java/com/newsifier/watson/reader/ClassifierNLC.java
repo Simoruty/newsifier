@@ -26,6 +26,6 @@ public class ClassifierNLC {
         String password = credentials.get("password").getAsString();
         service = new NaturalLanguageClassifier(username,password);
 
-        System.out.println("NLC Service created");
+        System.out.println("NLC Service init");
     }
 }

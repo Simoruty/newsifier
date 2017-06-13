@@ -40,7 +40,6 @@ public class FeedController extends HttpServlet {
         response.setContentType("text/html");
         response.getWriter().print("Hello newsifier!");
 
-/*
         ArrayList<Feed> feedsList = new ArrayList<>();
         Feed f1 = new Feed("Ansa_Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
         Feed f2 = new Feed("Ansa_Politica", new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
@@ -135,14 +134,6 @@ public class FeedController extends HttpServlet {
 
 
         }
-
-
-        */
-        DatasetDAO o = new ObjectStorageDatasetDAO();
-        File f = o.getDatasetFile("filesDataset", "Ansa_Cronaca.csv");
-        ClassifierNLC classifierNLC = new ClassifierNLC();
-        classifierNLC.createClassifier(f);
-
 
         System.out.println(" ++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++  END  ++++++++++++++++++  ");

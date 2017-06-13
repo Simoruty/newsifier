@@ -92,7 +92,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
 
         DLPayload payload = fileObj.download();
 
-        File file = new File(fileName + ".csv");
+        File file = new File(fileName);
         try {
             payload.writeToFile(file);
         } catch (IOException e) {
