@@ -1,5 +1,18 @@
 package com.newsifier.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException;
 import com.newsifier.Credentials;
 import com.newsifier.Settings;
@@ -20,17 +33,6 @@ import com.newsifier.watson.bean.SampleTestSetEntry;
 import com.newsifier.watson.reader.ClassifierNLC;
 import com.newsifier.watson.reader.Extractor;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/feed")
 public class FeedController extends HttpServlet {
@@ -43,7 +45,17 @@ public class FeedController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         response.getWriter().print("Hello newsifier!");
-        
+
+        int newsLimit = Integer.parseInt(request.getParameter("newslimit"));
+        int kwlimit = Integer.parseInt(request.getParameter("kwlimit"));
+        double catthreshold = Double.parseDouble(request.getParameter("catthreshold"));
+        double kwthreshold = Double.parseDouble(request.getParameter("kwthreshold"));
+        double trainingtestpercentage = Double.parseDouble(request.getParameter("trainingtestpercentage"));
+
+        Settings settings = new Settings(newsLimit, kwlimit,catthreshold, kwthreshold, trainingtestpercentage);
+
+
+        System.out.println(settings);
 
         ArrayList<Feed> feedsList = new ArrayList<>();
         Feed f1 = new Feed("Ansa_Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
@@ -74,7 +86,7 @@ public class FeedController extends HttpServlet {
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
 
         for (Feed feed : feedsList) {
-            cloudantNewsDAO.insertNews(RssManager.readerNews(feed, Settings.getLimitNews()), feed);
+            cloudantNewsDAO.insertNews(RssManager.readerNews(feed, settings.getLimitNews()), feed);
         }
 
         System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
@@ -90,7 +102,7 @@ public class FeedController extends HttpServlet {
             List<News> newsList = cloudantNewsDAO.getNews(feed);
 
             //extract keywords from news
-            Extractor e = new Extractor(Settings.getLimitKeywordsNews());
+            Extractor e = new Extractor(settings.getLimitKeywordsNews());
             NewsNLU newsNLU;
 
             CategoriesDAO categoriesDAO = new CloudantCategoriesDAO();
@@ -100,10 +112,10 @@ public class FeedController extends HttpServlet {
                 System.out.println(new Timestamp(System.currentTimeMillis()) + " Start extraction info for news : " + news.getUri());
                 try {
 
-                    // second parameter "score" is the threeshold for retrieve the categories
-                    // third parameter "relevance" is the threeshold for retrieve the keywords
+                    // second parameter "score" is the threshold to retrieve the categories
+                    // third parameter "relevance" is the threshold to retrieve the keywords
 
-                    newsNLU = e.extractInfo(news.getUri(), Settings.getScore(), Settings.getRelevance());
+                    newsNLU = e.extractInfo(news.getUri(), settings.getScore(), settings.getRelevance());
                     categoriesDAO.insertCategories(newsNLU);
 
                 } catch (ServiceResponseException exp) {
@@ -137,7 +149,7 @@ public class FeedController extends HttpServlet {
         File datasetFile = o.getDatasetFile(Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
         ClassifierNLC classifierNLC = new ClassifierNLC();
 
-        Dataset dataset = classifierNLC.splitDataset(datasetFile, Settings.getTrainingDimension());
+        Dataset dataset = classifierNLC.splitDataset(datasetFile, settings.getTrainingDimension());
 
         System.out.println(" ---------------- Creation Training Set ------------------  ");
 

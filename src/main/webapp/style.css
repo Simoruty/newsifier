@@ -8,7 +8,7 @@ body, html {
     height: 100%;
     margin: 0 auto;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    color: #ffffff;
+    color: black;
 }
 
 a {
@@ -87,3 +87,35 @@ pre {
     margin: 0;
 }
 
+.mainPanel {
+	background-color: white;
+}
+
+.centerPanel {
+	background-color: white;
+	position: absolute;
+	top: 20%;
+	left: 25%;
+	width: 50%;
+}
+
+.leftPanel {
+	float: left;
+}
+
+.rightPanel {
+	float: right;
+}
+
+.smallField {
+	width: 150px;
+}
+
+.smallLabel {
+	width: 150px;
+}
+
+.detached {
+	position: relative;
+	top: 5px;
+}

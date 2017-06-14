@@ -4,12 +4,14 @@ public class Settings {
 
     // Set limit news for feed
     private int limitNews = 10;
+
     public int getLimitNews() {
         return limitNews;
     }
 
     //limit keywords from news
     private int limitKeywordsNews = 20;
+
     public int getLimitKeywordsNews() {
         return limitKeywordsNews;
     }
@@ -23,6 +25,7 @@ public class Settings {
     public double getScore() {
         return score;
     }
+
     public double getRelevance() {
         return relevance;
     }
@@ -40,5 +43,16 @@ public class Settings {
         this.score = score;
         this.relevance = relevance;
         this.trainingDimension = trainingDimension;
+    }
+
+    @Override
+    public String toString() {
+        return "Settings{" +
+                "limitNews=" + limitNews +
+                ", limitKeywordsNews=" + limitKeywordsNews +
+                ", score=" + score +
+                ", relevance=" + relevance +
+                ", trainingDimension=" + trainingDimension +
+                '}';
     }
 }
