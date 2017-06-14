@@ -54,9 +54,6 @@ public class FeedController extends HttpServlet {
 
         Settings settings = new Settings(newsLimit, kwlimit,catthreshold, kwthreshold, trainingtestpercentage);
 
-
-        System.out.println(settings);
-
         ArrayList<Feed> feedsList = new ArrayList<>();
         Feed f1 = new Feed("Ansa_Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
         Feed f2 = new Feed("Ansa_Politica", new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
