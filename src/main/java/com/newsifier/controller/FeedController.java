@@ -1,18 +1,5 @@
 package com.newsifier.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException;
 import com.newsifier.Credentials;
 import com.newsifier.Settings;
@@ -33,6 +20,18 @@ import com.newsifier.watson.bean.SampleTestSetEntry;
 import com.newsifier.watson.reader.ClassifierNLC;
 import com.newsifier.watson.reader.Extractor;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @WebServlet("/feed")
 public class FeedController extends HttpServlet {
@@ -46,15 +45,26 @@ public class FeedController extends HttpServlet {
         response.setContentType("text/html");
         response.getWriter().print("Hello newsifier!");
 
-        int newsLimit = Integer.parseInt(request.getParameter("newslimit"));
-        int kwlimit = Integer.parseInt(request.getParameter("kwlimit"));
-        double catthreshold = Double.parseDouble(request.getParameter("catthreshold"));
-        double kwthreshold = Double.parseDouble(request.getParameter("kwthreshold"));
-        double trainingtestpercentage = Double.parseDouble(request.getParameter("trainingtestpercentage"));
+        String newsLimit = request.getParameter("newslimit");
+        String kwlimit = request.getParameter("kwlimit");
+        String catthreshold = request.getParameter("catthreshold");
+        String kwthreshold = request.getParameter("kwthreshold");
+        String trainingtestpercentage = request.getParameter("trainingtestpercentage");
 
-        Settings settings = new Settings(newsLimit, kwlimit,catthreshold, kwthreshold, trainingtestpercentage);
+        Settings settings = new Settings(newsLimit, kwlimit, catthreshold, kwthreshold, trainingtestpercentage);
 
         ArrayList<Feed> feedsList = new ArrayList<>();
+
+        String[] feeds = request.getParameter("feeds").split(";");
+
+        for (String feedStr : feeds) {
+            if (!feedStr.isEmpty()) {
+                Feed feed = new Feed(feedStr, new URL(feedStr));
+                feedsList.add(feed);
+            }
+        }
+
+        /*
         Feed f1 = new Feed("Ansa_Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
         Feed f2 = new Feed("Ansa_Politica", new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
         Feed f3 = new Feed("Ansa_Calcio", new URL("http://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml"));
@@ -64,6 +74,7 @@ public class FeedController extends HttpServlet {
         feedsList.add(f2);
         feedsList.add(f3);
 
+        */
         System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++++++++++  CREATION FEED DOCUMENTS  ++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");

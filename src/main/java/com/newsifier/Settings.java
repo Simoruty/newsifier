@@ -37,12 +37,18 @@ public class Settings {
         return trainingDimension;
     }
 
-    public Settings(int limitNews, int limitKeywordsNews, double score, double relevance, double trainingDimension) {
-        this.limitNews = limitNews;
-        this.limitKeywordsNews = limitKeywordsNews;
-        this.score = score;
-        this.relevance = relevance;
-        this.trainingDimension = trainingDimension;
+    public Settings(String limitNews, String limitKeywordsNews, String score, String relevance, String trainingDimension) {
+
+        if (!limitNews.isEmpty())
+            this.limitNews = Integer.parseInt(limitNews);
+        if (!limitKeywordsNews.isEmpty())
+            this.limitKeywordsNews = Integer.parseInt(limitKeywordsNews);
+        if (!score.isEmpty())
+            this.score = Double.parseDouble(score);
+        if (!relevance.isEmpty())
+            this.relevance = Double.parseDouble(relevance);
+        if (!trainingDimension.isEmpty())
+            this.trainingDimension = Double.parseDouble(trainingDimension);
     }
 
     @Override
