@@ -55,7 +55,7 @@ public class FeedController extends HttpServlet {
 
         ArrayList<Feed> feedsList = new ArrayList<>();
 
-        String[] feeds = request.getParameter("feeds").split(";");
+        String[] feeds = request.getParameter("feeds").split("\n");
 
         for (String feedStr : feeds) {
             if (!feedStr.isEmpty()) {
@@ -78,6 +78,8 @@ public class FeedController extends HttpServlet {
         System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++++++++++  CREATION FEED DOCUMENTS  ++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+
+        System.out.println(" Feed added : " + feedsList.size());
 
         // Adding feeds document
         FeedDAO cloudantFeedDAO = new CloudantFeedDAO();
