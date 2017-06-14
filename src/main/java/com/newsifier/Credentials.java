@@ -4,8 +4,14 @@ public class Credentials {
 
     // natural-language-classifier Credential
 
-    private static final String USERNAME_NLC = "f227a78a-df32-4809-acc8-b9d90c50f619";
-    private static final String PASSWORD_NLC = "Egdzg8WrerLO";
+    private static final String USERNAME_NLC = "5636ecdf-617a-4572-a478-4e3dfabb13ae";
+    private static final String PASSWORD_NLC = "ZYzJrmbOraWg";
+
+    private static final String CLASSIFIERNAME = "NLCClassifier";
+
+    public static String getClassifiername() {
+        return CLASSIFIERNAME;
+    }
 
     public static String getUsernameNlc() {
         return USERNAME_NLC;
@@ -42,17 +48,39 @@ public class Credentials {
     }
 
     //Credentials Object Storage service
-    private static final String USERID_OBJ = "7627741b299f4541afbc3e18ee62e498";
-    private static final String USERNAME_OBJ = "admin_2d7a1f0c87bc98e2c6a7935a9e0227ed94e2a83c";
-    private static final String PASSWORD_OBJ = "vSSlx(.u3et/SA5b";
+    private static final String USERID_OBJ = "373deb47a70e413d865cd14f9b23ee33";
+    private static final String USERNAME_OBJ = "admin_e783b9740bd987dd1a50d5661c49283b91e84ef4";
+    private static final String PASSWORD_OBJ = "H-Z^Sb7G)1cIrX19";
     private static final String DOMAIN_ID_OBJ = "26987fab99a847c89125147af010e28d";
     private static final String DOMAIN_NAME_OBJ = "795153";
-    private static final String PROJECT_ID_OBJ = "36d1d6cdd212453a9de944badb87f22f";
-    private static final String PROJECT_OBJ = "object_storage_cd39e834_ad71_41a9_b117_84e9d0ea9801";
+    private static final String PROJECT_ID_OBJ = "9da5b76d701a4bdba5d65b15e4495022";
+    private static final String PROJECT_OBJ = "object_storage_edc69694_aff8_4bd0_acbd_6d618ca7aeeb";
     private static final String AUTH_URL_OBJ = "https://lon-identity.open.softlayer.com";
     private static final String REGION_OBJ = "london";
     private static final String ROLE_OBJ = "admin";
 
+
+    private static final String CONTAINERNAMEOBJ = "filesDataset";
+    private static final String DATASETNAMEOBJ = "dataset.csv";
+    private static final String TRAININGSETNAMEOBJ = "trainingSet.csv";
+
+    private static final String TESTSETNAMEOBJ = "testSet.csv";
+
+    public static String getTestsetnameObj() {
+        return TESTSETNAMEOBJ;
+    }
+
+    public static String getTrainingsetnameObj() {
+        return TRAININGSETNAMEOBJ;
+    }
+
+    public static String getDatasetnameObj() {
+        return DATASETNAMEOBJ;
+    }
+
+    public static String getContainernameObj() {
+        return CONTAINERNAMEOBJ;
+    }
 
     public static String getUseridObj() {
         return USERID_OBJ;
