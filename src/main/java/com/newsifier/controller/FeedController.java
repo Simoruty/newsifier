@@ -39,6 +39,12 @@ public class FeedController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         response.getWriter().print("Hello newsifier!");
+        
+        /*
+         * TODO: Use an object
+         */
+        String newsLimit = request.getParameter("newslimit");
+        /**/
 
         ArrayList<Feed> feedsList = new ArrayList<>();
         Feed f1 = new Feed("Ansa_Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
@@ -95,8 +101,8 @@ public class FeedController extends HttpServlet {
                 System.out.println(new Timestamp(System.currentTimeMillis()) + " Start extraction info for news : " + news.getUri());
                 try {
 
-                    // second parameter "score" is the threeshold for retrieve the categories
-                    // third parameter "relevance" is the threeshold for retrieve the keywords
+                    // second parameter "score" is the threshold to retrieve the categories
+                    // third parameter "relevance" is the threshold to retrieve the keywords
 
                     newsNLU = e.extractInfo(news.getUri(), 0.5, 0.5);
                     categoriesDAO.insertCategories(newsNLU);
