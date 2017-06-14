@@ -3,34 +3,42 @@ package com.newsifier;
 public class Settings {
 
     // Set limit news for feed
-    private static final int LIMITNEWS = 10;
-    public static int getLimitnews() {
-        return LIMITNEWS;
+    private int limitNews = 10;
+    public int getLimitNews() {
+        return limitNews;
     }
 
     //limit keywords from news
-    private static final int LIMITKEYWORDSNEWS = 20;
-    public static int getLimitkeywordsnews() {
-        return LIMITKEYWORDSNEWS;
+    private int limitKeywordsNews = 20;
+    public int getLimitKeywordsNews() {
+        return limitKeywordsNews;
     }
 
     // "score" is the threeshold for retrieve the categories
     // "relevance" is the threeshold for retrieve the keywords
 
-    private static final double SCORE = 0.5;
-    private static final double RELEVANCE = 0.5;
+    private double score = 0.5;
+    private double relevance = 0.5;
 
-    public static double getScore() {
-        return SCORE;
+    public double getScore() {
+        return score;
     }
-    public static double getRelevance() {
-        return RELEVANCE;
+    public double getRelevance() {
+        return relevance;
     }
 
     // Training percent
-    private static final double TRAININGDIMENSION = 0.7;
+    private double trainingDimension = 0.7;
 
-    public static double getTrainingdimension() {
-        return TRAININGDIMENSION;
+    public double getTrainingDimension() {
+        return trainingDimension;
+    }
+
+    public Settings(int limitNews, int limitKeywordsNews, double score, double relevance, double trainingDimension) {
+        this.limitNews = limitNews;
+        this.limitKeywordsNews = limitKeywordsNews;
+        this.score = score;
+        this.relevance = relevance;
+        this.trainingDimension = trainingDimension;
     }
 }

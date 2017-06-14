@@ -43,6 +43,7 @@ public class FeedController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         response.getWriter().print("Hello newsifier!");
+        
 
         ArrayList<Feed> feedsList = new ArrayList<>();
         Feed f1 = new Feed("Ansa_Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
@@ -73,7 +74,7 @@ public class FeedController extends HttpServlet {
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
 
         for (Feed feed : feedsList) {
-            cloudantNewsDAO.insertNews(RssManager.readerNews(feed, Settings.getLimitnews()), feed);
+            cloudantNewsDAO.insertNews(RssManager.readerNews(feed, Settings.getLimitNews()), feed);
         }
 
         System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
@@ -89,7 +90,7 @@ public class FeedController extends HttpServlet {
             List<News> newsList = cloudantNewsDAO.getNews(feed);
 
             //extract keywords from news
-            Extractor e = new Extractor(Settings.getLimitkeywordsnews());
+            Extractor e = new Extractor(Settings.getLimitKeywordsNews());
             NewsNLU newsNLU;
 
             CategoriesDAO categoriesDAO = new CloudantCategoriesDAO();
@@ -136,7 +137,7 @@ public class FeedController extends HttpServlet {
         File datasetFile = o.getDatasetFile(Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
         ClassifierNLC classifierNLC = new ClassifierNLC();
 
-        Dataset dataset = classifierNLC.splitDataset(datasetFile, Settings.getTrainingdimension());
+        Dataset dataset = classifierNLC.splitDataset(datasetFile, Settings.getTrainingDimension());
 
         System.out.println(" ---------------- Creation Training Set ------------------  ");
 
