@@ -56,7 +56,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
         SwiftObject fileObj = objectStorage.objects().get(containerName, fileName);
 
         if (fileObj == null) { //The specified file was not found
-            System.out.println("File not found.");
+            System.out.println(fileName + " not found.");
             return null;
         }
 
@@ -71,7 +71,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
             e.printStackTrace();
         }
 
-        System.out.println("Successfully retrieved file from Object Storage!");
+        System.out.println(fileName + " successfully retrieved from Object Storage!");
 
         return outp;
     }
@@ -86,7 +86,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
         SwiftObject fileObj = objectStorage.objects().get(containerName, fileName);
 
         if (fileObj == null) { //The specified file was not found
-            System.out.println("File not found.");
+            System.out.println(fileName + " not found.");
             return null;
         }
 
@@ -142,7 +142,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
 
         if (containerName == null || fileName == null) {
             //No file was specified to be found, or container name is missing
-            System.out.println("File not found.");
+            System.out.println(fileName + " not found.");
             return;
         }
 
@@ -152,7 +152,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
 
         objectStorage.objects().put(containerName, fileName, payload);
 
-        System.out.println("Stored successfully!");
+        System.out.println(fileName + " stored successfully!");
 
     }
 
