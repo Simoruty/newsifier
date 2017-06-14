@@ -1,5 +1,18 @@
 package com.newsifier.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException;
 import com.newsifier.Credentials;
 import com.newsifier.Settings;
@@ -20,17 +33,6 @@ import com.newsifier.watson.bean.SampleTestSetEntry;
 import com.newsifier.watson.reader.ClassifierNLC;
 import com.newsifier.watson.reader.Extractor;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/feed")
 public class FeedController extends HttpServlet {
