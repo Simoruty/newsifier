@@ -1,5 +1,20 @@
 package com.newsifier.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.AsyncContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException;
 import com.newsifier.Credentials;
 import com.newsifier.Settings;
@@ -20,41 +35,22 @@ import com.newsifier.watson.bean.SampleTestSetEntry;
 import com.newsifier.watson.reader.ClassifierNLC;
 import com.newsifier.watson.reader.Extractor;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
-
-@WebServlet("/feed")
+@WebServlet(urlPatterns = "/feed", asyncSupported = true)
 public class FeedController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	WebSocketServer.sendMessageOnSocket("TESTTESEWREW");
-        response.setContentType("text/html");
-        response.getWriter().print("Hello newsifier!");
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String newsLimit = request.getParameter("newslimit");
         String kwlimit = request.getParameter("kwlimit");
         String catthreshold = request.getParameter("catthreshold");
         String kwthreshold = request.getParameter("kwthreshold");
         String trainingtestpercentage = request.getParameter("trainingtestpercentage");
 
-        Settings settings = new Settings(newsLimit, kwlimit, catthreshold, kwthreshold, trainingtestpercentage);
+        final Settings settings = new Settings(newsLimit, kwlimit, catthreshold, kwthreshold, trainingtestpercentage);
 
-        ArrayList<Feed> feedsList = new ArrayList<>();
+        final ArrayList<Feed> feedsList = new ArrayList<>();
 
         String[] feeds = request.getParameter("feeds").split("\n");
 
@@ -76,9 +72,20 @@ public class FeedController extends HttpServlet {
         feedsList.add(f3);
 
         */
+        
+        final AsyncContext asyncContext = request.startAsync(request, response);
 
-        execution(settings,feedsList);
+        new Thread() {
 
+          @Override
+          public void run() {
+              ServletResponse response = asyncContext.getResponse();
+              response.setContentType("text/plain");
+              execution(settings,feedsList);
+              asyncContext.complete();
+          }
+        }.start();
+        
     }
 
 
@@ -89,6 +96,7 @@ public class FeedController extends HttpServlet {
         System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
         System.out.println(" Feed added : " + feedsList.size());
+        WebSocketServer.sendMessageOnSocket(" Feed added : " + feedsList.size());
 
         // Adding feeds document
         FeedDAO cloudantFeedDAO = new CloudantFeedDAO();
@@ -99,7 +107,6 @@ public class FeedController extends HttpServlet {
         System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++++++++++  CREATION NEWS DOCUMENTS  ++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
-
         // Adding news documents by feed
         // Set limit news for feed
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();

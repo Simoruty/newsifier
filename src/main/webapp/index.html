@@ -24,33 +24,33 @@
 				<img alt="IBM Watson Logo" src="images/ibm-watson.png">
 				<b>Welcome to Newsifier! Please choose the desired settings..</b>
 			</div>
-			<form action="feed" method="get">
+<!-- 			<form action="feed" method="post"> -->
 				<div class="panel-body">
 						<div class="input-group">
 						  <span class="input-group-addon smallLabel" id="newslimit">News limit</span>
-						  <input type="text" class="form-control smallField" id="basic-url" aria-describedby="newslimit" placeholder="10" name="newslimit">
+						  <input id="newslimitP" type="text" class="form-control smallField" placeholder="10" name="newslimit">
 						  <span class="input-group-addon smallField" id="kwlimit">Keyword limit</span>
-						  <input type="text" class="form-control smallField" id="basic-url" aria-describedby="kwlimit" placeholder="10" name="kwlimit">
+						  <input type="text" class="form-control smallField" placeholder="10" name="kwlimit" id="kwlimitP">
 						</div><br>
 					    <div class="input-group">
 						  <span class="input-group-addon smallField" id="catthreshold">Categories threshold</span>
-						  <input type="text" class="form-control smallField" id="basic-url" aria-describedby="catthreshold" placeholder="0.5" name="catthreshold">
+						  <input type="text" class="form-control smallField"  placeholder="0.5" name="catthreshold" id="catthresholdP">
 						  <span class="input-group-addon smallField" id="kwthreshold">Keyword threshold</span>
-						  <input type="text" class="form-control smallField" id="basic-url" aria-describedby="kwthreshold" placeholder="0.5" name="kwthreshold">
+						  <input type="text" class="form-control smallField"  placeholder="0.5" name="kwthreshold" id="kwthresholdP">
 						</div><br>
 					    <div class="input-group">
 						  <span class="input-group-addon smallField" id="trainingtestpercentage">Training/test %</span>
-						  <input type="text" class="form-control smallField" id="basic-url" aria-describedby="trainingtestpercentage" placeholder="0.7" name="trainingtestpercentage">
+						  <input type="text" class="form-control smallField" placeholder="0.7" name="trainingtestpercentage" id="trainingtestpercentageP">
 					    </div><br>
-				    	<textarea class="form-control" rows="9" cols="8" placeholder="http://feeds.bbci.co.uk/news/world/rss.xml &#x0a; http://soccernet.espn.com/rss/news &#13;&#10; ..." name="feeds"></textarea>
-			  			<button type="submit" class="btn btn-primary rightPanel detached">Go!</button>
+				    	<textarea class="form-control" rows="9" cols="8" placeholder="http://feeds.bbci.co.uk/news/world/rss.xml &#x0a; http://soccernet.espn.com/rss/news &#13;&#10; ..." name="feeds" id="feedsP"></textarea>
+			  			<button type="button" class="btn btn-primary rightPanel detached" onclick="startExecution();">Go!</button>
 <!-- 			  			<button type="button" class="btn btn-primary rightPanel detached" style="float: left;" onclick="sendMessage('Ciao!');">WebSocket</button> -->
 				</div>
-			</form>
+<!-- 			</form> -->
 		</div>
 	</div>
 
-    <script src="js/jquery-3.2.1.slim.min.js.css"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/newsifier_websocket.js"></script>
     <script type="text/javascript">openWebSocket();</script>
