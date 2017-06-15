@@ -75,7 +75,15 @@ public class FeedController extends HttpServlet {
         feedsList.add(f3);
 
         */
-        System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+
+        execution(settings,feedsList);
+
+    }
+
+
+    private static void execution(Settings settings, ArrayList<Feed> feedsList){
+
+        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++++++++++  CREATION FEED DOCUMENTS  ++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
@@ -87,7 +95,7 @@ public class FeedController extends HttpServlet {
         cloudantFeedDAO.insertFeeds(feedsList);
 
 
-        System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++++++++++  CREATION NEWS DOCUMENTS  ++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
@@ -99,7 +107,7 @@ public class FeedController extends HttpServlet {
             cloudantNewsDAO.insertNews(RssManager.readerNews(feed, settings.getLimitNews()), feed);
         }
 
-        System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++++++++++  EXTRACTOR NLU  ++++++++++++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
@@ -138,22 +146,21 @@ public class FeedController extends HttpServlet {
             }
 
 
-            System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
-            System.out.println(" +++++++++++++++++++++ OBJECT STORAGE +++++++++++++++++++++++  ");
-            System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n  ");
-
-
             for (String category : categoriesDAO.allCategories()) {
                 stringCSV.append(categoriesDAO.newsToCSV(category));
                 //System.out.println(categoriesDAO.newsToCSV(category));
             }
         }
 
+        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        System.out.println(" +++++++++++++++++++++ OBJECT STORAGE +++++++++++++++++++++++  ");
+        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n  ");
+
         DatasetDAO o = new ObjectStorageDatasetDAO();
         o.saveDataset(stringCSV.toString(), Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
 
-        System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
-        System.out.println(" +++++++++++++++++++ NLC ++++++++++++++++++++++++++++++++++++  ");
+        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        System.out.println(" +++++++++++++++++++++++++ NLC ++++++++++++++++++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n ");
 
         File datasetFile = o.getDatasetFile(Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
@@ -185,11 +192,10 @@ public class FeedController extends HttpServlet {
         double precision = classifierNLC.precisionClassifier(datasetFile, testSetEntries);
         System.out.println(" Precision: " + precision + "\n");
 
-        System.out.println(" \n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         System.out.println(" +++++++++++++++++++++++  END  ++++++++++++++++++++++++++++++  ");
         System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
 
     }
-
 }

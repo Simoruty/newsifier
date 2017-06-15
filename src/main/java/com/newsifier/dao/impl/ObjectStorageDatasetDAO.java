@@ -150,10 +150,13 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
 
         Payload<InputStream> payload = new PayloadClass(streamIn);
 
-        objectStorage.objects().put(containerName, fileName, payload);
-
+        if (objectStorage.containers().create(containerName).isSuccess()) {
+            objectStorage.objects().put(containerName, fileName, payload);
         System.out.println(fileName + " stored successfully!");
-
+        }
+        else {
+            System.err.println(containerName + " is not created");
+        }
     }
 
 

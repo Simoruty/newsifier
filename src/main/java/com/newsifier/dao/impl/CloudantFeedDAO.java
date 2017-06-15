@@ -26,8 +26,6 @@ public class CloudantFeedDAO implements FeedDAO {
             feedsArr.add(feedMap);
         }
         cloudantFeeds.add("feeds", feedsArr);
-        createConnectionWithDBMaster();
-
         try {
             getDbMaster().save(cloudantFeeds);
             System.out.println("Created document Feeds saved");
@@ -57,12 +55,12 @@ public class CloudantFeedDAO implements FeedDAO {
 
     @Override
     public List<Feed> getFeeds() {
-
-        createConnectionWithDBMaster();
-
         JsonObject read = jsonObjectreaderFromCloudantId("Feeds", getDbMaster());
         FeedDB feedFromCloudant = new Gson().fromJson(read, FeedDB.class);
         return feedFromCloudant.getFeedslist();
     }
 
+    public CloudantFeedDAO() {
+        createConnectionWithCloudant();
+    }
 }

@@ -31,23 +31,21 @@ public class ClassifierNLC {
 
     public void createClassifier(File file, String classifierName) {
 
-        boolean found =false;
+        boolean found = false;
         String classifierId = "";
 
         Classifiers classifiers = service.getClassifiers().execute();
         for (Classifier classifier1 : classifiers.getClassifiers()) {
-            if (classifier1.getName().equals(classifierName))
-            {
-                found=true;
+            if (classifier1.getName().equals(classifierName)) {
+                found = true;
                 classifierId = classifier1.getId();
             }
         }
 
-        if (found){
+        if (found) {
             classifier = service.getClassifier(classifierId).execute();
             System.out.println("Classifier found");
-        }
-        else {
+        } else {
             classifier = service.createClassifier(classifierName, "en", file).execute();
             System.out.println("Classifier created at " + classifier.getCreated());
         }
@@ -108,7 +106,7 @@ public class ClassifierNLC {
 
 
     public ClassifierNLC() {
-        JsonObject credentials = getCredentials("natural-language-classifier", Credentials.getUsernameNlc(), Credentials.getPasswordNlc());
+        JsonObject credentials = getCredentials("natural_language_classifier", Credentials.getUsernameNlc(), Credentials.getPasswordNlc());
         String username = credentials.get("username").getAsString();
         String password = credentials.get("password").getAsString();
         service = new NaturalLanguageClassifier(username, password);
@@ -142,8 +140,7 @@ public class ClassifierNLC {
                     } catch (InterruptedException e) {
                         System.err.println(e.getMessage());
                     }
-                }
-                catch (com.ibm.watson.developer_cloud.service.exception.InternalServerErrorException ex1){
+                } catch (com.ibm.watson.developer_cloud.service.exception.InternalServerErrorException ex1) {
                     System.err.println(ex1.getMessage());
                     return null;
                 }
@@ -177,6 +174,9 @@ public class ClassifierNLC {
         }
 
         System.out.println(" True positive: " + tp + " Total: " + tot);
+
+        if (tot == 0.0)
+            return 0.0;
 
         return tp / tot;
     }

@@ -70,44 +70,36 @@ public class CloudantUtilsDAO {
         return null;
     }
 
-    protected static boolean createConnectionWithDBMaster() {
 
-        try {
-            // Create a new CloudantClient instance
-            cloudantClient = getCloudantClient();
+    protected static void createConnectionWithCloudant() {
 
-            // Show the server version
-            //System.out.println("Server Version: " + client.serverVersion());
+        while (true) {
+            try {
+                // Create a new CloudantClient instance
+                cloudantClient = getCloudantClient();
 
-            // Get a List of all the databases this Cloudant account
-//        List<String> databases = client.getAllDbs();
-//        System.out.println("All my databases : ");
-//        for (String dbMaster : databases) {
-//            System.out.println(dbMaster);
-//        }
+                // Show the server version
+                //System.out.println("Server Version: " + client.serverVersion());
 
-            // Create a new database.
-            dbMaster = cloudantClient.database("newsifier_db", true);
-            return true;
-        } catch (com.cloudant.client.org.lightcouch.CouchDbException ex) {
-            System.err.println("Error retrieving server response");
-            return false;
-        }
-    }
+                // Get a List of all the databases this Cloudant account
+                //  List<String> databases = client.getAllDbs();
+                //  System.out.println("All my databases : ");
+                //  for (String dbMaster : databases) {
+                //      System.out.println(dbMaster);
+                //  }
 
-    protected static boolean createConnectionWithDBCategories() {
+                // Create a new database.
+                dbMaster = cloudantClient.database("newsifier_db", true);
+                dbCategories = cloudantClient.database("newsifier_db_categories", true);
 
-        try {
-            // Create a new CloudantClient instance
-            cloudantClient = getCloudantClient();
+                return;
 
-            // Create a new database.
-            dbCategories = cloudantClient.database("newsifier_db_categories", true);
-
-            return true;
-        } catch (com.cloudant.client.org.lightcouch.CouchDbException ex) {
-            System.err.println("Error retrieving server response");
-            return false;
+            } catch (com.cloudant.client.org.lightcouch.CouchDbException ex) {
+                System.err.println("Error retrieving server response");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {}
+            }
         }
     }
 }

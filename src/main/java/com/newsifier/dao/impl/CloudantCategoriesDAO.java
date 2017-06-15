@@ -27,6 +27,8 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
 
         for (String cat : newsNLU.getCategories()) {
 
+            createConnectionWithCloudant();
+
             StringBuilder keywordsConcat = new StringBuilder();
             for (String s : newsNLU.getKeywords()) {
                 String mod = s.replaceAll("\\s+", "_");
@@ -47,51 +49,65 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
 
             cloudantCats.add("news", newsforCatArray);
 
-            while (!createConnectionWithDBCategories()) {
+            boolean done = false;
+
+            while (!done) {
                 try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
 
-            try {
+                    getDbCategories().save(cloudantCats);
 
-                getDbCategories().save(cloudantCats);
+                    System.out.println("Created document Categories " + cat + " saved");
+                    done = true;
 
-                System.out.println("Created document Categories " + cat + " saved");
+                } catch (com.cloudant.client.org.lightcouch.DocumentConflictException e) {
 
-            } catch (com.cloudant.client.org.lightcouch.DocumentConflictException e) {
+                    //Reading the existing document
+                    JsonObject read = jsonObjectreaderFromCloudantId(cat, getDbCategories());
+                    CategoriesDB newsFromCloudant = new Gson().fromJson(read, CategoriesDB.class);
 
-                //Reading the existing document
-                JsonObject read = jsonObjectreaderFromCloudantId(cat, getDbCategories());
-                CategoriesDB newsFromCloudant = new Gson().fromJson(read, CategoriesDB.class);
+                    //Added the new news to existing list
+                    newsFromCloudant.addNews(newsNLUByCat);
 
-                //Added the new news to existing list
-                newsFromCloudant.addNews(newsNLUByCat);
+                    //Remove old document
+                    getDbCategories().remove(read);
 
-                //Remove old document
-                getDbCategories().remove(read);
+                    //Remove revision id for the new creation
+                    newsFromCloudant.set_rev(null);
 
-                //Remove revision id for the new creation
-                newsFromCloudant.set_rev(null);
+                    while (true) {
+                        try {
+                            //Save the updated document
+                            getDbCategories().save(newsFromCloudant);
+                            System.out.println("Added new news keywords for the category " + cat + " saved");
+                            break;
 
-                try {
-                    //Save the updated document
-                    getDbCategories().save(newsFromCloudant);
-                    System.out.println("Added new news keywords for the category " + cat + " saved");
+                        } catch (com.cloudant.client.org.lightcouch.CouchDbException e1) {
+                            System.err.println(e1.getMessage());
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e2) {
+                                e2.printStackTrace();
+                            }
+                        }
+                    }
+                    done = true;
+
                 } catch (com.cloudant.client.org.lightcouch.CouchDbException e1) {
                     System.err.println(e1.getMessage());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e2) {
+                        e2.printStackTrace();
+                    }
                 }
             }
-
         }
     }
 
 
     @Override
     public List<NewsNLUByCat> getNewsbyCat(String cat) {
-        createConnectionWithDBCategories();
 
         JsonObject read = jsonObjectreaderFromCloudantId(cat, getDbCategories());
         CategoriesDB newsFromCloudant = new Gson().fromJson(read, CategoriesDB.class);
@@ -113,8 +129,6 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
 
         List<String> allcat = new ArrayList<>();
 
-        createConnectionWithDBCategories();
-
         //Query for retrieve all documents of db
         JsonObject read = jsonObjectreaderFromCloudantId("_all_docs", getDbCategories());
         JsonArray jsonElements = read.getAsJsonArray("rows");
@@ -128,4 +142,7 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
     }
 
 
+    public CloudantCategoriesDAO() {
+        createConnectionWithCloudant();
+    }
 }
