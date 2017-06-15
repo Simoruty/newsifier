@@ -1,22 +1,8 @@
 package com.newsifier.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.AsyncContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException;
 import com.newsifier.Credentials;
+import com.newsifier.Logger;
 import com.newsifier.Settings;
 import com.newsifier.dao.impl.CloudantCategoriesDAO;
 import com.newsifier.dao.impl.CloudantFeedDAO;
@@ -34,6 +20,20 @@ import com.newsifier.watson.bean.NewsNLU;
 import com.newsifier.watson.bean.SampleTestSetEntry;
 import com.newsifier.watson.reader.ClassifierNLC;
 import com.newsifier.watson.reader.Extractor;
+
+import javax.servlet.AsyncContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @WebServlet(urlPatterns = "/feed", asyncSupported = true)
@@ -88,15 +88,20 @@ public class FeedController extends HttpServlet {
         
     }
 
+    private static NewsDAO creationCloudantFromRss(Settings settings, ArrayList<Feed> feedsList){
+        Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.log(" +++++++++++++++++++ FEED DOCUMENTS CREATION ++++++++++++++++  ");
+        Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
-    private static void execution(Settings settings, ArrayList<Feed> feedsList){
+        Logger.log(" Feed added : " + feedsList.size());
 
-        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
-        System.out.println(" +++++++++++++++++++  CREATION FEED DOCUMENTS  ++++++++++++++  ");
-        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+        Logger.webLog(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" +++++++++++++++++++ FEED DOCUMENTS CREATION ++++++++++++++++  ");
+        Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
-        System.out.println(" Feed added : " + feedsList.size());
-        WebSocketServer.sendMessageOnSocket(" Feed added : " + feedsList.size());
+        Logger.webLog(" Feed added : " + feedsList.size());
+
+
 
         // Adding feeds document
         FeedDAO cloudantFeedDAO = new CloudantFeedDAO();
@@ -104,9 +109,15 @@ public class FeedController extends HttpServlet {
         cloudantFeedDAO.insertFeeds(feedsList);
 
 
-        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
-        System.out.println(" +++++++++++++++++++  CREATION NEWS DOCUMENTS  ++++++++++++++  ");
-        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+        Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.log(" +++++++++++++++++++ NEWS DOCUMENTS CREATION ++++++++++++++++  ");
+        Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+
+        Logger.webLog(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" +++++++++++++++++++ NEWS DOCUMENTS CREATION ++++++++++++++++  ");
+        Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+
+
         // Adding news documents by feed
         // Set limit news for feed
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
@@ -115,16 +126,31 @@ public class FeedController extends HttpServlet {
             cloudantNewsDAO.insertNews(RssManager.readerNews(feed, settings.getLimitNews()), feed);
         }
 
-        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
-        System.out.println(" +++++++++++++++++++  EXTRACTOR NLU  ++++++++++++++++++++++++  ");
-        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+        return cloudantNewsDAO;
+    }
+
+
+    private static String retrieveInfoFromNLU(Settings settings, ArrayList<Feed> feedsList, NewsDAO cloudantNewsDAO){
+        Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.log(" +++++++++++++++++++ NLU EXTRACTION  ++++++++++++++++++++++++  ");
+        Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+
+        Logger.webLog(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" +++++++++++++++++++ NLU EXTRACTION  ++++++++++++++++++++++++  ");
+        Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+
 
         StringBuilder stringCSV = new StringBuilder();
 
         for (Feed feed : feedsList) {
-            System.out.println("\n\n -----------------------------------------------------------  ");
-            System.out.println(" ------  FEED: " + feed.getName());
-            System.out.println(" ----------------------------------------------------------- \n\n");
+            Logger.log("\n\n -----------------------------------------------------------  ");
+            Logger.log(" ---  FEED: " + feed.getName());
+            Logger.log(" ----------------------------------------------------------- \n\n");
+
+            Logger.webLog("\n\n -----------------------------------------------------------  ");
+            Logger.webLog(" ---  FEED: " + feed.getName());
+            Logger.webLog(" ----------------------------------------------------------- \n\n");
+
             List<News> newsList = cloudantNewsDAO.getNews(feed);
 
             //extract keywords from news
@@ -133,9 +159,12 @@ public class FeedController extends HttpServlet {
 
             CategoriesDAO categoriesDAO = new CloudantCategoriesDAO();
 
+            Logger.webLog( "Start extraction info for news ");
+
             for (News news : newsList) {
 
-                System.out.println(new Timestamp(System.currentTimeMillis()) + " Start extraction info for news : " + news.getUri());
+                Logger.log(new Timestamp(System.currentTimeMillis()) + " Start extraction info for news : " + news.getUri());
+
                 try {
 
                     // second parameter "score" is the threshold to retrieve the categories
@@ -146,64 +175,105 @@ public class FeedController extends HttpServlet {
 
                 } catch (ServiceResponseException exp) {
                     if (exp.getStatusCode() > 400) {
-                        System.err.println(" SERVICE ERROR " + exp.getStatusCode());
+                        Logger.logErr(" SERVICE ERROR " + exp.getStatusCode());
                         break;
                     }
                 }
-                System.out.println(new Timestamp(System.currentTimeMillis()) + " End extraction info for news : " + news.getUri());
+                Logger.log(new Timestamp(System.currentTimeMillis()) + " End extraction info for news : " + news.getUri());
             }
 
 
             for (String category : categoriesDAO.allCategories()) {
                 stringCSV.append(categoriesDAO.newsToCSV(category));
-                //System.out.println(categoriesDAO.newsToCSV(category));
+                //Logger.log(categoriesDAO.newsToCSV(category));
             }
         }
 
-        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
-        System.out.println(" +++++++++++++++++++++ OBJECT STORAGE +++++++++++++++++++++++  ");
-        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n  ");
+        return stringCSV.toString();
+    }
 
-        DatasetDAO o = new ObjectStorageDatasetDAO();
-        o.saveDataset(stringCSV.toString(), Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
 
-        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
-        System.out.println(" +++++++++++++++++++++++++ NLC ++++++++++++++++++++++++++++++  ");
-        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n ");
+    private static void saveDatasetObjectStorage(DatasetDAO datasetDAO, String datasetCSV){
+        Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.log(" +++++++++++++++++++++ OBJECT STORAGE +++++++++++++++++++++++  ");
+        Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n  ");
 
-        File datasetFile = o.getDatasetFile(Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
+
+        Logger.webLog(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" +++++++++++++++++++++ OBJECT STORAGE +++++++++++++++++++++++  ");
+        Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n  ");
+
+        datasetDAO.saveDataset(datasetCSV, Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
+
+    }
+
+
+    private static void creationExecutionNLC(Settings settings, DatasetDAO datasetDAO){
+        Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.log(" +++++++++++++++++++++++++ NLC ++++++++++++++++++++++++++++++  ");
+        Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n ");
+
+        Logger.webLog(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" +++++++++++++++++++++++++ NLC ++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n ");
+
+
+        File datasetFile = datasetDAO.getDatasetFile(Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
         ClassifierNLC classifierNLC = new ClassifierNLC();
 
         Dataset dataset = classifierNLC.splitDataset(datasetFile, settings.getTrainingDimension());
 
-        System.out.println(" ---------------- Creation Training Set ------------------  ");
+        Logger.log(" \n---------------- Training Set Creation ------------------  ");
+        Logger.webLog(" \n---------------- Training Set Creation ------------------  ");
 
-        o.saveDataset(dataset.getTrainingSet(), Credentials.getContainernameObj(), Credentials.getTrainingsetnameObj());
+        datasetDAO.saveDataset(dataset.getTrainingSet(), Credentials.getContainernameObj(), Credentials.getTrainingsetnameObj());
 
-        System.out.println(" ---------------- Creation Test Set ----------------------  ");
+        Logger.log(" \n---------------- Test Set Creation ----------------------  ");
+        Logger.webLog(" \n---------------- Test Set Creation ----------------------  ");
 
-        o.saveDataset(dataset.getTestSet(), Credentials.getContainernameObj(), Credentials.getTestsetnameObj());
+        datasetDAO.saveDataset(dataset.getTestSet(), Credentials.getContainernameObj(), Credentials.getTestsetnameObj());
 
-        System.out.println(" ---------- Creation and Training Classifier --------------  ");
+        Logger.log(" \n---------- Classifier Creation and Training --------------  ");
+        Logger.webLog(" \n---------- Classifier Creation and Training --------------  ");
 
-        File trainingFile = o.getDatasetFile(Credentials.getContainernameObj(), Credentials.getTrainingsetnameObj());
-        classifierNLC.createClassifier(trainingFile, Credentials.getClassifiername());
+        File trainingFile = datasetDAO.getDatasetFile(Credentials.getContainernameObj(), Credentials.getTrainingsetnameObj());
+        classifierNLC.createClassifier(trainingFile, Credentials.getClassifierName());
 
 
-        System.out.println(" ------------------ Testing Classifier --------------------  ");
+        Logger.log(" \n------------------ Classifier Testing --------------------  ");
+        Logger.webLog(" \n------------------ Classifier Testing --------------------  ");
 
-        File testFile = o.getDatasetFile(Credentials.getContainernameObj(), Credentials.getTestsetnameObj());
+        File testFile = datasetDAO.getDatasetFile(Credentials.getContainernameObj(), Credentials.getTestsetnameObj());
         List<SampleTestSetEntry> testSetEntries = classifierNLC.testClassifier(testFile);
 
-        System.out.println(" ------------------- Performance --------------------------  ");
+        Logger.log(" \n------------------- Performance --------------------------  ");
+        Logger.webLog(" \n------------------- Performance --------------------------  ");
 
         double precision = classifierNLC.precisionClassifier(datasetFile, testSetEntries);
-        System.out.println(" Precision: " + precision + "\n");
+        Logger.log(" Precision: " + precision + "\n");
+        Logger.webLog(" Precision: " + precision + "\n");
+    }
 
-        System.out.println(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
-        System.out.println(" +++++++++++++++++++++++  END  ++++++++++++++++++++++++++++++  ");
-        System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
+    private static void execution(Settings settings, ArrayList<Feed> feedsList){
+
+        NewsDAO cloudantNewsDAO = creationCloudantFromRss(settings,feedsList);
+
+        String datasetCSV = retrieveInfoFromNLU(settings,feedsList,cloudantNewsDAO);
+
+        DatasetDAO datasetDAO = new ObjectStorageDatasetDAO();
+
+        saveDatasetObjectStorage(datasetDAO, datasetCSV);
+
+        creationExecutionNLC(settings, datasetDAO);
+
+        Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.log(" +++++++++++++++++++++++  END  ++++++++++++++++++++++++++++++++  ");
+        Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+
+        Logger.webLog(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" +++++++++++++++++++++++  END  +++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
     }
 }

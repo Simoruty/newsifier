@@ -1,6 +1,12 @@
 package com.newsifier.dao.impl;
 
-import static com.newsifier.dao.impl.Utils.getCredentials;
+import com.cloudant.client.api.ClientBuilder;
+import com.cloudant.client.api.CloudantClient;
+import com.cloudant.client.api.Database;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.newsifier.Credentials;
+import com.newsifier.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,12 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import com.cloudant.client.api.ClientBuilder;
-import com.cloudant.client.api.CloudantClient;
-import com.cloudant.client.api.Database;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.newsifier.Credentials;
+import static com.newsifier.dao.impl.Utils.getCredentials;
 
 public class CloudantUtilsDAO {
 
@@ -64,7 +65,7 @@ public class CloudantUtilsDAO {
                     .build();
             return cloudantClient;
         } catch (MalformedURLException ex) {
-            System.err.println(ex.getMessage());
+            Logger.logErr(ex.getMessage());
         }
 
         return null;
@@ -79,13 +80,13 @@ public class CloudantUtilsDAO {
                 cloudantClient = getCloudantClient();
 
                 // Show the server version
-                //System.out.println("Server Version: " + client.serverVersion());
+                //Logger.log("Server Version: " + client.serverVersion());
 
                 // Get a List of all the databases this Cloudant account
                 //  List<String> databases = client.getAllDbs();
-                //  System.out.println("All my databases : ");
+                //  Logger.log("All my databases : ");
                 //  for (String dbMaster : databases) {
-                //      System.out.println(dbMaster);
+                //      Logger.log(dbMaster);
                 //  }
 
                 // Create a new database.
@@ -95,7 +96,7 @@ public class CloudantUtilsDAO {
                 return;
 
             } catch (com.cloudant.client.org.lightcouch.CouchDbException ex) {
-                System.err.println("Error retrieving server response");
+                Logger.logErr("Error retrieving server response");
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {}

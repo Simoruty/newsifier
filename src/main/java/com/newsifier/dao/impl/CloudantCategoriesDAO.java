@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.newsifier.Logger;
 import com.newsifier.dao.interfaces.CategoriesDAO;
 import com.newsifier.watson.bean.NewsNLU;
 import com.newsifier.watson.bean.NewsNLUByCat;
@@ -56,7 +57,8 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
 
                     getDbCategories().save(cloudantCats);
 
-                    System.out.println("Created document Categories " + cat + " saved");
+                    Logger.log("Created cloudant document for category : " + cat);
+                    Logger.webLog("Created cloudant document for category : " + cat);
                     done = true;
 
                 } catch (com.cloudant.client.org.lightcouch.DocumentConflictException e) {
@@ -78,11 +80,12 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
                         try {
                             //Save the updated document
                             getDbCategories().save(newsFromCloudant);
-                            System.out.println("Added new news keywords for the category " + cat + " saved");
+                            Logger.log("Added keywords for category : " + cat);
+                            Logger.webLog("Added keywords for category : " + cat);
                             break;
 
                         } catch (com.cloudant.client.org.lightcouch.CouchDbException e1) {
-                            System.err.println(e1.getMessage());
+                            Logger.logErr(e1.getMessage());
 
                             try {
                                 Thread.sleep(1000);
@@ -94,7 +97,7 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
                     done = true;
 
                 } catch (com.cloudant.client.org.lightcouch.CouchDbException e1) {
-                    System.err.println(e1.getMessage());
+                    Logger.logErr(e1.getMessage());
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e2) {

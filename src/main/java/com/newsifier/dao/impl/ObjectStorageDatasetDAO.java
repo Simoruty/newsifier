@@ -2,6 +2,7 @@ package com.newsifier.dao.impl;
 
 import com.google.gson.JsonObject;
 import com.newsifier.Credentials;
+import com.newsifier.Logger;
 import com.newsifier.dao.interfaces.DatasetDAO;
 import org.openstack4j.api.OSClient;
 import org.openstack4j.api.storage.ObjectStorageService;
@@ -32,7 +33,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
         String domainId = credentials.get("domainId").getAsString();
         String region = credentials.get("region").getAsString();
 
-        System.out.println("Authenticating...");
+        Logger.log("Authenticating...");
 
         OSClient.OSClientV3 os = OSFactory.builderV3()
                 .endpoint(auth_url)
@@ -41,7 +42,9 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
                 .authenticate()
                 .useRegion(region);
 
-        System.out.println("Authenticated successfully!");
+        Logger.log("Authenticated successfully!");
+        Logger.webLog("Authentication with Object Storage successfully");
+
         return os.objectStorage();
     }
 
@@ -50,13 +53,13 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
 
         ObjectStorageService objectStorage = authenticateAndGetObjectStorageService();
 
-        System.out.println("Retrieving file from Object Storage...");
+        Logger.log("Retrieving file from Object Storage...");
 
 
         SwiftObject fileObj = objectStorage.objects().get(containerName, fileName);
 
         if (fileObj == null) { //The specified file was not found
-            System.out.println(fileName + " not found.");
+            Logger.log(fileName + " not found.");
             return null;
         }
 
@@ -71,7 +74,8 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
             e.printStackTrace();
         }
 
-        System.out.println(fileName + " successfully retrieved from Object Storage!");
+        Logger.log(fileName + " successfully retrieved from Object Storage!");
+        Logger.webLog(fileName + " successfully retrieved from Object Storage");
 
         return outp;
     }
@@ -81,12 +85,12 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
 
         ObjectStorageService objectStorage = authenticateAndGetObjectStorageService();
 
-        System.out.println("Retrieving file from Object Storage...");
+        Logger.log("Retrieving file from Object Storage...");
 
         SwiftObject fileObj = objectStorage.objects().get(containerName, fileName);
 
         if (fileObj == null) { //The specified file was not found
-            System.out.println(fileName + " not found.");
+            Logger.log(fileName + " not found.");
             return null;
         }
 
@@ -138,11 +142,11 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
 
         ObjectStorageService objectStorage = authenticateAndGetObjectStorageService();
 
-        System.out.println("Storing file in Object Storage...");
+        Logger.log("Storing file in Object Storage...");
 
         if (containerName == null || fileName == null) {
             //No file was specified to be found, or container name is missing
-            System.out.println(fileName + " not found.");
+            Logger.log(fileName + " not found.");
             return;
         }
 
@@ -152,10 +156,10 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
 
         if (objectStorage.containers().create(containerName).isSuccess()) {
             objectStorage.objects().put(containerName, fileName, payload);
-        System.out.println(fileName + " stored successfully!");
-        }
-        else {
-            System.err.println(containerName + " is not created");
+            Logger.log(fileName + " successfully stored");
+            Logger.webLog(fileName + " successfully stored");
+        } else {
+            Logger.logErr(containerName + " is not created");
         }
     }
 

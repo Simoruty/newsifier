@@ -60,7 +60,7 @@ public class Extractor {
         List<String> keywordsLabel = new ArrayList();
 
         for (CategoriesResult cat : cats) {
-            //System.out.println("The category : " + cat.getLabel() + " with score " + cat.getScore());
+            //Logger.log("The category : " + cat.getLabel() + " with score " + cat.getScore());
             if (cat.getScore() > score) {
                 categoriesLabel.add(cat.getLabel().replaceAll("\\s+", "_").replaceAll(",",""));
             }
@@ -70,7 +70,7 @@ public class Extractor {
 
         for (KeywordsResult key : keys) {
             if (key.getRelevance() > relevance) {
-                //System.out.println("The keyword: " + key.getText() + " with score " + key.getRelevance());
+                //Logger.log("The keyword: " + key.getText() + " with score " + key.getRelevance());
                 keywordsLabel.add(key.getText());
             }
         }

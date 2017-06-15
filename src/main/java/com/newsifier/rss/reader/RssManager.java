@@ -1,5 +1,6 @@
 package com.newsifier.rss.reader;
 
+import com.newsifier.Logger;
 import com.newsifier.rss.bean.Feed;
 import com.newsifier.rss.bean.News;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -17,10 +18,10 @@ import java.util.List;
  */
 public class RssManager {
 
-    public static void printNews(Feed f) {
-        ArrayList<News> newsFromFeed = (ArrayList<News>) readerNews(f, 100000000);
+    public static void printNews(Feed f, int limit) {
+        ArrayList<News> newsFromFeed = (ArrayList<News>) readerNews(f, limit);
         for (News news : newsFromFeed) {
-            System.out.println(" Title: " + news.getTitle() + " url: " + news.getUri());
+            Logger.log(" Title: " + news.getTitle() + " url: " + news.getUri());
         }
 
     }

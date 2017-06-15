@@ -3,6 +3,7 @@ package com.newsifier.dao.impl;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.newsifier.Logger;
 import com.newsifier.dao.interfaces.FeedDAO;
 import com.newsifier.rss.bean.Feed;
 
@@ -28,7 +29,8 @@ public class CloudantFeedDAO implements FeedDAO {
         cloudantFeeds.add("feeds", feedsArr);
         try {
             getDbMaster().save(cloudantFeeds);
-            System.out.println("Created document Feeds saved");
+            Logger.log("Created cloudant document : Feeds");
+            Logger.log("Created cloudant document : Feeds");
 
 
         } catch (com.cloudant.client.org.lightcouch.DocumentConflictException e) {

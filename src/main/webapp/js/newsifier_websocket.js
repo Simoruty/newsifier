@@ -1,7 +1,8 @@
 var socket;
 
 function openWebSocket() {
-	socket = new WebSocket('ws://localhost:9080/newsifier/websocket');
+	var windowLocation = (window.location.href).replace("https","ws").replace("http","ws") + "websocket";
+	socket = new WebSocket(windowLocation);
 
 	socket.addEventListener('open', function() {
 		console.log("Connection established, handle with event");
@@ -14,6 +15,7 @@ function openWebSocket() {
 	socket.onmessage = function(event) {
 //		console.log("[SRV]: " + event.data);
 		document.getElementById("feedsP").value = document.getElementById("feedsP").value + event.data + "\n";
+        document.getElementById("feedsP").scrollTop = document.getElementById("feedsP").scrollHeight
 	};
 }
 

@@ -9,7 +9,7 @@ public class Credentials {
 
     private static final String CLASSIFIERNAME = "NLCClassifier";
 
-    public static String getClassifiername() {
+    public static String getClassifierName() {
         return CLASSIFIERNAME;
     }
 

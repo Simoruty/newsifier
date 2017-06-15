@@ -6,6 +6,7 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Class
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifiers;
 import com.newsifier.Credentials;
+import com.newsifier.Logger;
 import com.newsifier.watson.bean.Dataset;
 import com.newsifier.watson.bean.SampleDatasetEntry;
 import com.newsifier.watson.bean.SampleTestSetEntry;
@@ -44,10 +45,12 @@ public class ClassifierNLC {
 
         if (found) {
             classifier = service.getClassifier(classifierId).execute();
-            System.out.println("Classifier found");
+            Logger.log("Classifier found");
+            Logger.webLog("Classifier found");
         } else {
             classifier = service.createClassifier(classifierName, "en", file).execute();
-            System.out.println("Classifier created at " + classifier.getCreated());
+            Logger.log("Classifier created at " + classifier.getCreated());
+            Logger.webLog("Classifier created at " + classifier.getCreated());
         }
     }
 
@@ -70,13 +73,13 @@ public class ClassifierNLC {
         Dataset datasetOutput = new Dataset(trainingSet.toString(), numberSampleLimit, testSet.toString(), (datasetEntries.size() - numberSampleLimit));
 
         /*
-        System.out.println("-------------------- Training set ----- Size: " + datasetOutput.getTrainingSetSize() + " ----");
-        System.out.println(datasetOutput.getTrainingSet());
-        System.out.println("-------------------- ------------ -------------------");
+        Logger.log("-------------------- Training set ----- Size: " + datasetOutput.getTrainingSetSize() + " ----");
+        Logger.log(datasetOutput.getTrainingSet());
+        Logger.log("-------------------- ------------ -------------------");
 
-        System.out.println("------------------------ Test set ----- Size: " + datasetOutput.getTestSetSize() + " ----");
-        System.out.println(datasetOutput.getTestSet());
-        System.out.println("-------------------- ------------ -------------------");
+        Logger.log("------------------------ Test set ----- Size: " + datasetOutput.getTestSetSize() + " ----");
+        Logger.log(datasetOutput.getTestSet());
+        Logger.log("-------------------- ------------ -------------------");
         */
 
         return datasetOutput;
@@ -111,7 +114,7 @@ public class ClassifierNLC {
         String password = credentials.get("password").getAsString();
         service = new NaturalLanguageClassifier(username, password);
 
-        System.out.println("NLC Service init");
+        Logger.log("NLC Service init");
     }
 
     public List<SampleTestSetEntry> testClassifier(File testSet) {
@@ -131,17 +134,19 @@ public class ClassifierNLC {
                         testSetEntries.add(setEntry);
 
                     }
+                    Logger.webLog("The classifier is ready");
                     success = true;
 
                 } catch (com.ibm.watson.developer_cloud.service.exception.ConflictException ex) {
-                    System.err.println(ex.getMessage());
+                    Logger.logErr(ex.getMessage());
+                    Logger.webLog("The classifier is being training.. please wait");
                     try {
-                        Thread.sleep(80000);
+                        Thread.sleep(8000);
                     } catch (InterruptedException e) {
-                        System.err.println(e.getMessage());
+                        Logger.logErr(e.getMessage());
                     }
                 } catch (com.ibm.watson.developer_cloud.service.exception.InternalServerErrorException ex1) {
-                    System.err.println(ex1.getMessage());
+                    Logger.logErr(ex1.getMessage());
                     return null;
                 }
             }
@@ -173,7 +178,8 @@ public class ClassifierNLC {
             }
         }
 
-        System.out.println(" True positive: " + tp + " Total: " + tot);
+        Logger.log(" True positive: " + tp + " Total: " + tot);
+        Logger.webLog(" True positive: " + tp + " Total: " + tot);
 
         if (tot == 0.0)
             return 0.0;

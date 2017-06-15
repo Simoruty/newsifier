@@ -3,6 +3,7 @@ package com.newsifier.dao.impl;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.newsifier.Logger;
 import com.newsifier.dao.interfaces.NewsDAO;
 import com.newsifier.rss.bean.Feed;
 import com.newsifier.rss.bean.News;
@@ -29,7 +30,8 @@ public class CloudantNewsDAO implements NewsDAO {
 
         try {
             getDbMaster().save(cloudantNews);
-            System.out.println("Created document news for the feed " + f.getName() + " saved");
+            Logger.log("Created cloudant document for feed : " + f.getName());
+            Logger.webLog("Created cloudant document for feed : " + f.getName());
 
         } catch (com.cloudant.client.org.lightcouch.DocumentConflictException e) {
 
@@ -51,7 +53,9 @@ public class CloudantNewsDAO implements NewsDAO {
             //Save the updated document
             getDbMaster().save(newsFromCloudant);
 
-            System.out.println("Added new news for the feed " + f.getName() + " saved");
+            Logger.log("Added news for feed : " + f.getName());
+            Logger.webLog("Added news for feed : " + f.getName());
+
         }
     }
 
