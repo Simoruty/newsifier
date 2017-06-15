@@ -7,4 +7,7 @@ applications:
   host: newsifier
   disk_quota: 1024M
   services:
-  - Object Storage-0f
+  - Cloudant NoSQL DB-it
+  - Natural Language Classifier-as
+  - Natural Language Understanding-j6
+  - Object Storage-kz

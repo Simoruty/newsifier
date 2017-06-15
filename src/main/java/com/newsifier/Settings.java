@@ -10,7 +10,7 @@ public class Settings {
     }
 
     //limit keywords from news
-    private int limitKeywordsNews = 20;
+    private int limitKeywordsNews = 10;
 
     public int getLimitKeywordsNews() {
         return limitKeywordsNews;

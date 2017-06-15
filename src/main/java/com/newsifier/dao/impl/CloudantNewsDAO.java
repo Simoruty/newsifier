@@ -26,7 +26,6 @@ public class CloudantNewsDAO implements NewsDAO {
             newsArray.add(newsMap);
         }
         cloudantNews.add("news", newsArray);
-        createConnectionWithDBMaster();
 
         try {
             getDbMaster().save(cloudantNews);
@@ -58,10 +57,13 @@ public class CloudantNewsDAO implements NewsDAO {
 
     @Override
     public List<News> getNews(Feed f) {
-        createConnectionWithDBMaster();
 
         JsonObject read = jsonObjectreaderFromCloudantId(f.getName(), getDbMaster());
         NewsDB newsFromCloudant = new Gson().fromJson(read, NewsDB.class);
         return newsFromCloudant.getNewslist();
+    }
+
+    public CloudantNewsDAO() {
+        createConnectionWithCloudant();
     }
 }
