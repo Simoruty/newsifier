@@ -12,7 +12,8 @@ function openWebSocket() {
 	};
 	
 	socket.onmessage = function(event) {
-		console.log("[SRV]: " + event.data);
+//		console.log("[SRV]: " + event.data);
+		document.getElementById("feedsP").value = document.getElementById("feedsP").value + event.data + "\n";
 	};
 }
 
@@ -33,4 +34,13 @@ function startExecution(){
 	var feedsParam = document.getElementById("feedsP").value;
 	
 	$.post( "feed", { newslimit: newsLimitParam, kwlimit: kwLimitParam, catthreshold: catthresholdParam, kwthreshold: kwthresholdParam, trainingtestpercentage: trainingtestpercentageParam, feeds: feedsParam } );
+}
+
+function reset(){
+	document.getElementById("newslimitP").value = "";
+	document.getElementById("kwlimitP").value = "";
+	document.getElementById("catthresholdP").value = "";
+	document.getElementById("kwthresholdP").value = "";
+	document.getElementById("trainingtestpercentageP").value = "";
+	document.getElementById("feedsP").value = "";
 }
