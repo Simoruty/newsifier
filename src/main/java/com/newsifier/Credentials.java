@@ -48,17 +48,16 @@ public class Credentials {
     }
 
     //Credentials Object Storage service
-    private static final String USERID_OBJ = "ee984cbda6854a6c913992399319f1f4";
-    private static final String USERNAME_OBJ = "admin_b1320375b5f42ddd89d4f45248cd9bfcce1d07c2";
-    private static final String PASSWORD_OBJ = "at8HgJO]kj&o8ig(";
-    private static final String DOMAIN_ID_OBJ = "5a5263e2f4554cf395e9d2077ab851c4";
-    private static final String DOMAIN_NAME_OBJ = "786039";
-    private static final String PROJECT_ID_OBJ = "a2c3b32faa5143e09f848413d2251240";
-    private static final String PROJECT_OBJ = "object_storage_cd733896_3e33_4ec6_a495_58908ad3f365";
-    private static final String AUTH_URL_OBJ = "https://identity.open.softlayer.com";
-    private static final String REGION_OBJ = "dallas";
-    private static final String ROLE_OBJ = "admin";
-
+    private static final String AUTH_URL_OBJ = "";
+    private static final String PROJECT_OBJ = "";
+    private static final String PROJECT_ID_OBJ = "";
+    private static final String REGION_OBJ = "";
+    private static final String USERID_OBJ = "";
+    private static final String USERNAME_OBJ = "";
+    private static final String PASSWORD_OBJ = "";
+    private static final String DOMAIN_ID_OBJ = "";
+    private static final String DOMAIN_NAME_OBJ = "";
+    private static final String ROLE_OBJ = "";
 
     private static final String CONTAINERNAMEOBJ = "filesDataset";
     private static final String DATASETNAMEOBJ = "dataset.csv";

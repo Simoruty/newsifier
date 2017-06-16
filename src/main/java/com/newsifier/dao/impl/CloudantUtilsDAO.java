@@ -103,4 +103,13 @@ public class CloudantUtilsDAO {
             }
         }
     }
+
+
+    public static void eraseDatabase(){
+        createConnectionWithCloudant();
+        cloudantClient.deleteDB(dbMaster.info().getDbName());
+        cloudantClient.deleteDB(dbCategories.info().getDbName());
+        Logger.webLog("Cloudant documents erased");
+        Logger.log("Cloudant documents erased");
+    }
 }

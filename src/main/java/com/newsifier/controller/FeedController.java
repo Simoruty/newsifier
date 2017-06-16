@@ -4,10 +4,7 @@ import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException
 import com.newsifier.Credentials;
 import com.newsifier.Logger;
 import com.newsifier.Settings;
-import com.newsifier.dao.impl.CloudantCategoriesDAO;
-import com.newsifier.dao.impl.CloudantFeedDAO;
-import com.newsifier.dao.impl.CloudantNewsDAO;
-import com.newsifier.dao.impl.ObjectStorageDatasetDAO;
+import com.newsifier.dao.impl.*;
 import com.newsifier.dao.interfaces.CategoriesDAO;
 import com.newsifier.dao.interfaces.DatasetDAO;
 import com.newsifier.dao.interfaces.FeedDAO;
@@ -39,6 +36,25 @@ import java.util.List;
 @WebServlet(urlPatterns = "/feed", asyncSupported = true)
 public class FeedController extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        final AsyncContext asyncContext = request.startAsync(request, response);
+
+        new Thread() {
+
+            @Override
+            public void run() {
+                ServletResponse response = asyncContext.getResponse();
+                response.setContentType("text/plain");
+                eraseAll();
+                asyncContext.complete();
+            }
+        }.start();
+
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -72,23 +88,23 @@ public class FeedController extends HttpServlet {
         feedsList.add(f3);
 
         */
-        
+
         final AsyncContext asyncContext = request.startAsync(request, response);
 
         new Thread() {
 
-          @Override
-          public void run() {
-              ServletResponse response = asyncContext.getResponse();
-              response.setContentType("text/plain");
-              execution(settings,feedsList);
-              asyncContext.complete();
-          }
+            @Override
+            public void run() {
+                ServletResponse response = asyncContext.getResponse();
+                response.setContentType("text/plain");
+                execution(settings, feedsList);
+                asyncContext.complete();
+            }
         }.start();
-        
+
     }
 
-    private static NewsDAO creationCloudantFromRss(Settings settings, ArrayList<Feed> feedsList){
+    private static NewsDAO creationCloudantFromRss(Settings settings, ArrayList<Feed> feedsList) {
         Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.log(" +++++++++++++++++++ FEED DOCUMENTS CREATION ++++++++++++++++  ");
         Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
@@ -100,7 +116,6 @@ public class FeedController extends HttpServlet {
         Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
         Logger.webLog(" Feed added : " + feedsList.size());
-
 
 
         // Adding feeds document
@@ -130,7 +145,7 @@ public class FeedController extends HttpServlet {
     }
 
 
-    private static String retrieveInfoFromNLU(Settings settings, ArrayList<Feed> feedsList, NewsDAO cloudantNewsDAO){
+    private static String retrieveInfoFromNLU(Settings settings, ArrayList<Feed> feedsList, NewsDAO cloudantNewsDAO) {
         Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.log(" +++++++++++++++++++ NLU EXTRACTION  ++++++++++++++++++++++++  ");
         Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
@@ -159,7 +174,7 @@ public class FeedController extends HttpServlet {
 
             CategoriesDAO categoriesDAO = new CloudantCategoriesDAO();
 
-            Logger.webLog( "Start extraction info for news ");
+            Logger.webLog("Start extraction info for news ");
 
             for (News news : newsList) {
 
@@ -193,7 +208,7 @@ public class FeedController extends HttpServlet {
     }
 
 
-    private static void saveDatasetObjectStorage(DatasetDAO datasetDAO, String datasetCSV){
+    private static void saveDatasetObjectStorage(DatasetDAO datasetDAO, String datasetCSV) {
         Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.log(" +++++++++++++++++++++ OBJECT STORAGE +++++++++++++++++++++++  ");
         Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n  ");
@@ -208,7 +223,7 @@ public class FeedController extends HttpServlet {
     }
 
 
-    private static void creationExecutionNLC(Settings settings, DatasetDAO datasetDAO){
+    private static void creationExecutionNLC(Settings settings, DatasetDAO datasetDAO) {
         Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.log(" +++++++++++++++++++++++++ NLC ++++++++++++++++++++++++++++++  ");
         Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n ");
@@ -244,22 +259,28 @@ public class FeedController extends HttpServlet {
         Logger.webLog(" \n------------------ Classifier Testing --------------------  ");
 
         File testFile = datasetDAO.getDatasetFile(Credentials.getContainernameObj(), Credentials.getTestsetnameObj());
-        List<SampleTestSetEntry> testSetEntries = classifierNLC.testClassifier(testFile);
+        List<SampleTestSetEntry> testSetEntries = classifierNLC.testClassifier(testFile, Credentials.getClassifierName());
 
-        Logger.log(" \n------------------- Performance --------------------------  ");
-        Logger.webLog(" \n------------------- Performance --------------------------  ");
+        if (testSetEntries != null) {
+            Logger.log(" \n------------------- Performance --------------------------  ");
+            Logger.webLog(" \n------------------- Performance --------------------------  ");
 
-        double precision = classifierNLC.precisionClassifier(datasetFile, testSetEntries);
-        Logger.log(" Precision: " + precision + "\n");
-        Logger.webLog(" Precision: " + precision + "\n");
+            double precision = classifierNLC.precisionClassifier(datasetFile, testSetEntries);
+            Logger.log(" Precision: " + precision + "\n");
+            Logger.webLog(" Precision: " + precision + "\n");
+        }
+        else {
+            Logger.log("Testing is not available");
+            Logger.webLog("Testing is not available");
+        }
     }
 
 
-    private static void execution(Settings settings, ArrayList<Feed> feedsList){
+    private static void execution(Settings settings, ArrayList<Feed> feedsList) {
 
-        NewsDAO cloudantNewsDAO = creationCloudantFromRss(settings,feedsList);
+        NewsDAO cloudantNewsDAO = creationCloudantFromRss(settings, feedsList);
 
-        String datasetCSV = retrieveInfoFromNLU(settings,feedsList,cloudantNewsDAO);
+        String datasetCSV = retrieveInfoFromNLU(settings, feedsList, cloudantNewsDAO);
 
         DatasetDAO datasetDAO = new ObjectStorageDatasetDAO();
 
@@ -276,4 +297,29 @@ public class FeedController extends HttpServlet {
         Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
 
     }
+
+
+    private static void eraseAll() {
+        eraseCloudant();
+        eraseObjectStorage();
+        eraseNLC();
+    }
+
+    private static void eraseCloudant() {
+        CloudantUtilsDAO.eraseDatabase();
+    }
+
+    private static void eraseObjectStorage() {
+        DatasetDAO datasetDAO = new ObjectStorageDatasetDAO();
+        datasetDAO.eraseDataset(Credentials.getContainernameObj(), Credentials.getTrainingsetnameObj());
+        datasetDAO.eraseDataset(Credentials.getContainernameObj(), Credentials.getTestsetnameObj());
+        datasetDAO.eraseDataset(Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
+        datasetDAO.eraseDataset(Credentials.getContainernameObj());
+    }
+
+    private static void eraseNLC() {
+        ClassifierNLC classifierNLC = new ClassifierNLC();
+        classifierNLC.eraseClassifier(Credentials.getClassifierName());
+    }
+
 }

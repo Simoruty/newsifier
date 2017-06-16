@@ -19,6 +19,12 @@ import static com.newsifier.dao.impl.Utils.getCredentials;
 
 public class ObjectStorageDatasetDAO implements DatasetDAO {
 
+    private static ObjectStorageService objectStorage;
+
+    public ObjectStorageDatasetDAO() {
+        objectStorage = authenticateAndGetObjectStorageService();
+    }
+
     private ObjectStorageService authenticateAndGetObjectStorageService() {
 
         JsonObject credentials = getCredentials("Object-Storage", Credentials.getUseridObj(), Credentials.getUsernameObj(), Credentials.getPasswordObj(), Credentials.getDomainIdObj(), Credentials.getDomainNameObj(), Credentials.getProjectIdObj(), Credentials.getProjectObj(), Credentials.getAuthUrlObj(), Credentials.getRegionObj(), Credentials.getRoleObj());
@@ -33,7 +39,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
         String domainId = credentials.get("domainId").getAsString();
         String region = credentials.get("region").getAsString();
 
-        Logger.log("Authenticating...");
+        Logger.log("Object Storage Authenticating...");
 
         OSClient.OSClientV3 os = OSFactory.builderV3()
                 .endpoint(auth_url)
@@ -42,7 +48,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
                 .authenticate()
                 .useRegion(region);
 
-        Logger.log("Authenticated successfully!");
+        Logger.log("Object Storage Authenticated successfully!");
         Logger.webLog("Authentication with Object Storage successfully");
 
         return os.objectStorage();
@@ -51,10 +57,7 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
     @Override
     public String getDataset(String containerName, String fileName) {
 
-        ObjectStorageService objectStorage = authenticateAndGetObjectStorageService();
-
         Logger.log("Retrieving file from Object Storage...");
-
 
         SwiftObject fileObj = objectStorage.objects().get(containerName, fileName);
 
@@ -82,8 +85,6 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
 
     @Override
     public File getDatasetFile(String containerName, String fileName) {
-
-        ObjectStorageService objectStorage = authenticateAndGetObjectStorageService();
 
         Logger.log("Retrieving file from Object Storage...");
 
@@ -140,8 +141,6 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
     @Override
     public void saveDataset(String datasetStr, String containerName, String fileName) {
 
-        ObjectStorageService objectStorage = authenticateAndGetObjectStorageService();
-
         Logger.log("Storing file in Object Storage...");
 
         if (containerName == null || fileName == null) {
@@ -161,6 +160,23 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
         } else {
             Logger.logErr(containerName + " is not created");
         }
+    }
+
+
+    @Override
+    public void eraseDataset(String containerName) {
+
+        objectStorage.containers().delete(containerName);
+        Logger.webLog("All files into Object storage deleted");
+        Logger.log("All files into Object storage deleted");
+    }
+
+    @Override
+    public void eraseDataset(String containerName, String fileName) {
+
+        objectStorage.objects().delete(containerName,fileName);
+        Logger.webLog(fileName + " erased from Object storage");
+        Logger.log(fileName + " erased from Object storage");
     }
 
 
@@ -196,5 +212,4 @@ public class ObjectStorageDatasetDAO implements DatasetDAO {
         }
 
     }
-
 }
