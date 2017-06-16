@@ -1,5 +1,6 @@
 package com.newsifier.dao.impl;
 
+import com.cloudant.client.org.lightcouch.TooManyRequestsException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -7,6 +8,7 @@ import com.newsifier.Logger;
 import com.newsifier.dao.interfaces.FeedDAO;
 import com.newsifier.rss.bean.Feed;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.newsifier.dao.impl.CloudantUtilsDAO.*;
@@ -57,9 +59,16 @@ public class CloudantFeedDAO implements FeedDAO {
 
     @Override
     public List<Feed> getFeeds() {
-        JsonObject read = jsonObjectreaderFromCloudantId("Feeds", getDbMaster());
-        FeedDB feedFromCloudant = new Gson().fromJson(read, FeedDB.class);
-        return feedFromCloudant.getFeedslist();
+        try {
+            JsonObject read = jsonObjectreaderFromCloudantId("Feeds", getDbMaster());
+            FeedDB feedFromCloudant = new Gson().fromJson(read, FeedDB.class);
+            return feedFromCloudant.getFeedslist();
+        }
+        catch (TooManyRequestsException e){
+            Logger.webLog("Error: too_many_requests. Reason: You've exceeded your current limit of 20 requests per second for lookup class\n");
+            Logger.logErr("Error: too_many_requests. Reason: You've exceeded your current limit of 20 requests per second for lookup class\n");
+            return new ArrayList<>();
+        }
     }
 
     public CloudantFeedDAO() {

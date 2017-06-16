@@ -1,12 +1,13 @@
 applications:
-- memory: 512M
+- path: target/newsifier.war
+  memory: 512M
   instances: 1
-  domain: mybluemix.net
+  domain: eu-gb.mybluemix.net
   name: newsifier
   host: newsifier
   disk_quota: 1024M
   services:
-  - Cloudant NoSQL DB-qg
-  - Natural Language Classifier-ew
-  - Natural Language Understanding-qj
-  - Object Storage-tr
+  - Cloudant NoSQL DB-it
+  - Natural Language Classifier-as
+  - Natural Language Understanding-j6
+  - Object Storage-kz

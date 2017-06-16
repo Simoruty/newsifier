@@ -303,6 +303,15 @@ public class FeedController extends HttpServlet {
         eraseCloudant();
         eraseObjectStorage();
         eraseNLC();
+
+        Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.log(" +++++++++++++++++++++++  END  ++++++++++++++++++++++++++++++++  ");
+        Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+
+        Logger.webLog(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" +++++++++++++++++++++++  END  +++++++++++++++++++++++++++++++  ");
+        Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+
     }
 
     private static void eraseCloudant() {
