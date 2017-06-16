@@ -48,17 +48,16 @@ public class Credentials {
     }
 
     //Credentials Object Storage service
+    private static final String AUTH_URL_OBJ = "";
+    private static final String PROJECT_OBJ = "";
+    private static final String PROJECT_ID_OBJ = "";
+    private static final String REGION_OBJ = "";
     private static final String USERID_OBJ = "";
     private static final String USERNAME_OBJ = "";
     private static final String PASSWORD_OBJ = "";
     private static final String DOMAIN_ID_OBJ = "";
     private static final String DOMAIN_NAME_OBJ = "";
-    private static final String PROJECT_ID_OBJ = "";
-    private static final String PROJECT_OBJ = "";
-    private static final String AUTH_URL_OBJ = "";
-    private static final String REGION_OBJ = "";
     private static final String ROLE_OBJ = "";
-
 
     private static final String CONTAINERNAMEOBJ = "filesDataset";
     private static final String DATASETNAMEOBJ = "dataset.csv";

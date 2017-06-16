@@ -5,6 +5,7 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLang
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifiers;
+import com.ibm.watson.developer_cloud.service.exception.BadRequestException;
 import com.newsifier.Credentials;
 import com.newsifier.Logger;
 import com.newsifier.watson.bean.Dataset;
@@ -32,18 +33,10 @@ public class ClassifierNLC {
 
     public void createClassifier(File file, String classifierName) {
 
-        boolean found = false;
-        String classifierId = "";
+        try {
+        String classifierId = getClassifierId(classifierName);
 
-        Classifiers classifiers = service.getClassifiers().execute();
-        for (Classifier classifier1 : classifiers.getClassifiers()) {
-            if (classifier1.getName().equals(classifierName)) {
-                found = true;
-                classifierId = classifier1.getId();
-            }
-        }
-
-        if (found) {
+        if (!classifierId.isEmpty()) {
             classifier = service.getClassifier(classifierId).execute();
             Logger.log("Classifier found");
             Logger.webLog("Classifier found");
@@ -51,6 +44,38 @@ public class ClassifierNLC {
             classifier = service.createClassifier(classifierName, "en", file).execute();
             Logger.log("Classifier created at " + classifier.getCreated());
             Logger.webLog("Classifier created at " + classifier.getCreated());
+        }
+    }catch(BadRequestException e){
+            Logger.webLog("Data too small for the classifier's creation");
+            Logger.logErr("Data too small for the classifier's creation");
+        }
+    }
+
+    private String getClassifierId(String classifierName){
+
+        String classifierId = "";
+
+        Classifiers classifiers = service.getClassifiers().execute();
+        for (Classifier classifier1 : classifiers.getClassifiers()) {
+            if (classifier1.getName().equals(classifierName)) {
+                classifierId = classifier1.getId();
+            }
+        }
+        return classifierId;
+    }
+
+    public void eraseClassifier(String classifierName){
+
+        String classifierId = getClassifierId(classifierName);
+
+        if (!classifierId.isEmpty()) {
+            service.deleteClassifier(classifierId).execute();
+            Logger.log("Classifier deleted");
+            Logger.webLog("Classifier deleted");
+        }
+        else {
+            Logger.log("Classifier not found");
+            Logger.webLog("Classifier not found");
         }
     }
 
@@ -117,13 +142,17 @@ public class ClassifierNLC {
         Logger.log("NLC Service init");
     }
 
-    public List<SampleTestSetEntry> testClassifier(File testSet) {
+    public List<SampleTestSetEntry> testClassifier(File testSet, String classifierName) {
         try {
             List<String> testSample = FileUtils.readLines(testSet, "UTF-8");
 
             List<SampleTestSetEntry> testSetEntries = new ArrayList<>(testSample.size());
 
-            String classifierId = classifier.getId();
+            String classifierId = getClassifierId(classifierName);
+
+            // Classifier is not created
+            if (classifierId.isEmpty())
+                return null;
 
             boolean success = false;
             while (!success) {
