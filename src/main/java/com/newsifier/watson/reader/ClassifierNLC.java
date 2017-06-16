@@ -170,7 +170,7 @@ public class ClassifierNLC {
                     Logger.logErr(ex.getMessage());
                     Logger.webLog("The classifier is being trained.. Please wait");
                     try {
-                        Thread.sleep(8000);
+                        Thread.sleep(30000);
                     } catch (InterruptedException e) {
                         Logger.logErr(e.getMessage());
                     }
