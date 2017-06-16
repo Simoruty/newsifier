@@ -13,7 +13,6 @@ function openWebSocket() {
     };
 
     socket.onmessage = function (event) {
-//		console.log("[SRV]: " + event.data);
         document.getElementById("feedsP").value = document.getElementById("feedsP").value + event.data + "\n";
         document.getElementById("feedsP").scrollTop = document.getElementById("feedsP").scrollHeight
     };
@@ -28,6 +27,7 @@ function closeWebSocket(){
 }
 
 function startExecution() {
+	openWebSocket();
     var newsLimitParam = document.getElementById("newslimitP").value;
     var kwLimitParam = document.getElementById("kwlimitP").value;
     var catthresholdParam = document.getElementById("catthresholdP").value;

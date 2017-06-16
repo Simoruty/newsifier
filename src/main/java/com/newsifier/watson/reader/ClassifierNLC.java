@@ -168,7 +168,7 @@ public class ClassifierNLC {
 
                 } catch (com.ibm.watson.developer_cloud.service.exception.ConflictException ex) {
                     Logger.logErr(ex.getMessage());
-                    Logger.webLog("The classifier is being training.. please wait");
+                    Logger.webLog("The classifier is being trained.. Please wait");
                     try {
                         Thread.sleep(8000);
                     } catch (InterruptedException e) {
