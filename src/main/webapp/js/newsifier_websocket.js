@@ -23,9 +23,8 @@ function sendMessage(message) {
     socket.send(message);
 }
 
-function closeWebSocket() {
-    socket.close();
-    ;
+function closeWebSocket(){
+	socket.close();
 }
 
 function startExecution() {
