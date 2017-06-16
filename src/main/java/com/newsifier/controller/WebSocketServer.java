@@ -1,5 +1,7 @@
 package com.newsifier.controller;
 
+import java.io.IOException;
+
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -24,8 +26,15 @@ public class WebSocketServer {
 		try {
 			socketSession.getBasicRemote().sendText(message);
 		} catch (Exception e) {
-			//e.printStackTrace();
 			Logger.logErr("Error sending message to the client: " + e.getMessage());
+		}
+    }
+    
+    public static void closeWebSocket(){
+    	try {
+			socketSession.close();
+		} catch (IOException e) {
+			Logger.logErr("Error closing the socket with id " + socketSession.getId() + ": " + e.getMessage());
 		}
     }
     

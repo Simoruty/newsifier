@@ -295,6 +295,8 @@ public class FeedController extends HttpServlet {
         Logger.webLog(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.webLog(" +++++++++++++++++++++++  END  +++++++++++++++++++++++++++++++  ");
         Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+        
+        WebSocketServer.closeWebSocket();
 
     }
 
@@ -311,6 +313,8 @@ public class FeedController extends HttpServlet {
         Logger.webLog(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.webLog(" +++++++++++++++++++++++  END  +++++++++++++++++++++++++++++++  ");
         Logger.webLog(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  \n\n");
+        
+        WebSocketServer.closeWebSocket();
 
     }
 

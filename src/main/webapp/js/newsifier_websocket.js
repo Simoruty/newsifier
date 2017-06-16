@@ -11,6 +11,10 @@ function openWebSocket() {
     socket.onopen = function () {
         console.log("Connection is open");
     };
+    
+    socket.onclose = function () {
+        console.log("Connection is closed");
+    };
 
     socket.onmessage = function (event) {
         document.getElementById("feedsP").value = document.getElementById("feedsP").value + event.data + "\n";
@@ -58,9 +62,18 @@ function reset() {
 }
 
 function eraseAll() {
+	openWebSocket();
     var answer = confirm("Are you sure to erase all data?")
     if (answer) {
         $.get("feed");
     }
+}
 
+function refreshWebSocket(){
+	if(socket)
+		closeWebSocket();
+	
+	openWebSocket();
+	
+	console.log("Socket refreshed");
 }
