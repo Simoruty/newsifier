@@ -1,5 +1,6 @@
 package com.newsifier.dao.impl;
 
+import com.cloudant.client.org.lightcouch.TooManyRequestsException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -112,9 +113,16 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
     @Override
     public List<NewsNLUByCat> getNewsbyCat(String cat) {
 
-        JsonObject read = jsonObjectreaderFromCloudantId(cat, getDbCategories());
-        CategoriesDB newsFromCloudant = new Gson().fromJson(read, CategoriesDB.class);
-        return newsFromCloudant.getNewslist();
+        try {
+            JsonObject read = jsonObjectreaderFromCloudantId(cat, getDbCategories());
+            CategoriesDB newsFromCloudant = new Gson().fromJson(read, CategoriesDB.class);
+            return newsFromCloudant.getNewslist();
+        }
+        catch (TooManyRequestsException e){
+            Logger.webLog("Error: too_many_requests. Reason: You've exceeded your current limit of 20 requests per second for lookup class\n");
+            Logger.logErr("Error: too_many_requests. Reason: You've exceeded your current limit of 20 requests per second for lookup class\n");
+            return new ArrayList<>();
+        }
     }
 
     @Override
