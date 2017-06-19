@@ -1,4 +1,4 @@
-package com.newsifier.dao.impl;
+package com.newsifier.utils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -6,19 +6,13 @@ import com.google.gson.JsonParser;
 
 public class Utils {
 
-    /**
-     * For deployment
-     *
-     * @return credential JsonObject
-     */
-
     public static JsonObject getCredentials(String serviceName, String usr, String pwd) {
         //for local deployment
         if (System.getenv("VCAP_SERVICES") == null || System.getenv("VCAP_SERVICES").isEmpty()) {
             return readProperties(usr, pwd);
         }
 
-        //for bluemix deployment
+        //On Bluemix
         else {
             JsonParser parser = new JsonParser();
             JsonObject allServices = parser.parse(System.getenv("VCAP_SERVICES")).getAsJsonObject();
@@ -43,11 +37,6 @@ public class Utils {
 
     }
 
-    /**
-     * For local deployment
-     *
-     * @return credential JsonObject
-     */
     private static JsonObject readProperties(String username, String pwd) {
 
         JsonObject credentialsJson = new JsonObject();

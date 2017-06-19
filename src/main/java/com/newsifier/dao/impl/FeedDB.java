@@ -1,6 +1,6 @@
 package com.newsifier.dao.impl;
 
-import com.newsifier.rss.bean.Feed;
+import com.newsifier.rss.bean.News;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ public class FeedDB {
 
     private String _id;
     private String _rev;
-    private ArrayList<Feed> feeds;
+    private ArrayList<News> news;
 
     public String getId() {
         return _id;
@@ -22,17 +22,17 @@ public class FeedDB {
         this._rev = _rev;
     }
 
-    public ArrayList<Feed> getFeedslist() {
-        return feeds;
+    public ArrayList<News> getNewslist() {
+        return news;
     }
 
-    public void setFeeds(ArrayList<Feed> feeds) {
-        this.feeds = feeds;
+    public void setNews(ArrayList<News> news) {
+        this.news = news;
     }
 
-    public void addFeed(Feed f) {
-        if (!feeds.contains(f)) {
-            feeds.add(f);
+    public void addNews(News n) {
+        if (!news.contains(n)) {
+            news.add(n);
         }
     }
 }

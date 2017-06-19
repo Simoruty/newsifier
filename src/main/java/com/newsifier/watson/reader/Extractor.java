@@ -3,13 +3,13 @@ package com.newsifier.watson.reader;
 import com.google.gson.JsonObject;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.*;
-import com.newsifier.Credentials;
+import com.newsifier.utils.Credentials;
 import com.newsifier.watson.bean.NewsNLU;
+
+import static com.newsifier.utils.Utils.getCredentials;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.newsifier.dao.impl.Utils.getCredentials;
 
 public class Extractor {
 

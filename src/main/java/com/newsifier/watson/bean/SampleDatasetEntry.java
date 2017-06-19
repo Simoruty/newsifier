@@ -1,5 +1,8 @@
 package com.newsifier.watson.bean;
 
+/**
+ * Represent a dataset entry
+ */
 public class SampleDatasetEntry {
 
     private String category;

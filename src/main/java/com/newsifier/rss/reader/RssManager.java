@@ -1,8 +1,8 @@
 package com.newsifier.rss.reader;
 
-import com.newsifier.Logger;
 import com.newsifier.rss.bean.Feed;
 import com.newsifier.rss.bean.News;
+import com.newsifier.utils.Logger;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -14,19 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class extracts the feed/news structure
+ * Manages the RSS feeds manipulation
  */
 public class RssManager {
 
+	/**
+	 * 
+	 */
     public static void printNews(Feed f, int limit) {
         ArrayList<News> newsFromFeed = (ArrayList<News>) readerNews(f, limit);
         for (News news : newsFromFeed) {
             Logger.log(" Title: " + news.getTitle() + " url: " + news.getUri());
         }
-
     }
 
-
+    /**
+     * Retrieves the content from the external RSS feeds and returns the News List.
+     */
     public static List<News> readerNews(Feed f, int limit) {
 
         int i = 1;

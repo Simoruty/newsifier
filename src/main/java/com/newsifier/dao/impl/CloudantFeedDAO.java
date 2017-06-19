@@ -4,14 +4,14 @@ import com.cloudant.client.org.lightcouch.TooManyRequestsException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.newsifier.Logger;
 import com.newsifier.dao.interfaces.FeedDAO;
 import com.newsifier.rss.bean.Feed;
+import com.newsifier.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.newsifier.dao.impl.CloudantUtilsDAO.*;
+import static com.newsifier.dao.impl.CloudantDAOUtils.*;
 
 public class CloudantFeedDAO implements FeedDAO {
 
@@ -39,7 +39,7 @@ public class CloudantFeedDAO implements FeedDAO {
 
             //Reading the existing document
             JsonObject read = jsonObjectreaderFromCloudantId("Feeds", getDbMaster());
-            FeedDB feedFromCloudant = new Gson().fromJson(read, FeedDB.class);
+            FeedsContainerDB feedFromCloudant = new Gson().fromJson(read, FeedsContainerDB.class);
 
             //Added the new feed to existing list
             for (Feed feed : feeds) {
@@ -61,7 +61,7 @@ public class CloudantFeedDAO implements FeedDAO {
     public List<Feed> getFeeds() {
         try {
             JsonObject read = jsonObjectreaderFromCloudantId("Feeds", getDbMaster());
-            FeedDB feedFromCloudant = new Gson().fromJson(read, FeedDB.class);
+            FeedsContainerDB feedFromCloudant = new Gson().fromJson(read, FeedsContainerDB.class);
             return feedFromCloudant.getFeedslist();
         }
         catch (TooManyRequestsException e){

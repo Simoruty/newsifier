@@ -1,12 +1,12 @@
 package com.newsifier.watson.bean;
 
-public class NewsNLUByCat {
+public class NewsWithKeywords {
 
     private String uri;
     private String keywords;
 
 
-    public NewsNLUByCat(String uri, String keywords) {
+    public NewsWithKeywords(String uri, String keywords) {
         this.uri = uri;
         this.keywords = keywords;
     }
@@ -33,7 +33,7 @@ public class NewsNLUByCat {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        NewsNLUByCat news = (NewsNLUByCat) o;
+        NewsWithKeywords news = (NewsWithKeywords) o;
 
         return uri.equals(news.uri);
     }

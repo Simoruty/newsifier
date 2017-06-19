@@ -5,15 +5,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.newsifier.Logger;
 import com.newsifier.dao.interfaces.CategoriesDAO;
+import com.newsifier.utils.Logger;
 import com.newsifier.watson.bean.NewsNLU;
-import com.newsifier.watson.bean.NewsNLUByCat;
+import com.newsifier.watson.bean.NewsWithKeywords;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.newsifier.dao.impl.CloudantUtilsDAO.*;
+import static com.newsifier.dao.impl.CloudantDAOUtils.*;
 
 public class CloudantCategoriesDAO implements CategoriesDAO {
 
@@ -38,7 +38,7 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
             }
             keywordsConcat = keywordsConcat.deleteCharAt(keywordsConcat.length() - 1);
 
-            NewsNLUByCat newsNLUByCat = new NewsNLUByCat(newsNLU.getUrlNews(), keywordsConcat.toString());
+            NewsWithKeywords newsNLUByCat = new NewsWithKeywords(newsNLU.getUrlNews(), keywordsConcat.toString());
 
             JsonObject cloudantCats = new JsonObject();
             cloudantCats.addProperty("_id", cat);
@@ -64,11 +64,11 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
 
                 } catch (com.cloudant.client.org.lightcouch.DocumentConflictException e) {
 
-                    //Reading the existing document
+                    //Read the existing document
                     JsonObject read = jsonObjectreaderFromCloudantId(cat, getDbCategories());
-                    CategoriesDB newsFromCloudant = new Gson().fromJson(read, CategoriesDB.class);
+                    CategoryDB newsFromCloudant = new Gson().fromJson(read, CategoryDB.class);
 
-                    //Added the new news to existing list
+                    //Add the new news to existing list
                     newsFromCloudant.addNews(newsNLUByCat);
 
                     //Remove old document
@@ -111,11 +111,11 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
 
 
     @Override
-    public List<NewsNLUByCat> getNewsbyCat(String cat) {
+    public List<NewsWithKeywords> getNewsbyCat(String cat) {
 
         try {
             JsonObject read = jsonObjectreaderFromCloudantId(cat, getDbCategories());
-            CategoriesDB newsFromCloudant = new Gson().fromJson(read, CategoriesDB.class);
+            CategoryDB newsFromCloudant = new Gson().fromJson(read, CategoryDB.class);
             return newsFromCloudant.getNewslist();
         }
         catch (TooManyRequestsException e){
@@ -128,8 +128,8 @@ public class CloudantCategoriesDAO implements CategoriesDAO {
     @Override
     public String newsToCSV(String cat) {
         StringBuilder csvFile = new StringBuilder();
-        List<NewsNLUByCat> newsNLUByCats = getNewsbyCat(cat);
-        for (NewsNLUByCat newsNLUByCat : newsNLUByCats) {
+        List<NewsWithKeywords> newsNLUByCats = getNewsbyCat(cat);
+        for (NewsWithKeywords newsNLUByCat : newsNLUByCats) {
             csvFile.append(newsNLUByCat.getKeywords()).append(",").append(cat).append("\n");
         }
         return csvFile.toString();

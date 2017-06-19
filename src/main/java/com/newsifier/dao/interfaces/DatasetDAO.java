@@ -3,6 +3,9 @@ package com.newsifier.dao.interfaces;
 
 import java.io.File;
 
+/**
+ * Manages the Dataset storage
+ */
 public interface DatasetDAO {
 
     String getDataset(String containerName, String fileName);

@@ -1,6 +1,8 @@
 package com.newsifier.watson.bean;
 
-
+/**
+ * Represent a test set entry
+ */
 public class SampleTestSetEntry {
     private String keywords;
     private String classificatedClass;

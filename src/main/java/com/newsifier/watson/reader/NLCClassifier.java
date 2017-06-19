@@ -6,8 +6,8 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Class
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifiers;
 import com.ibm.watson.developer_cloud.service.exception.BadRequestException;
-import com.newsifier.Credentials;
-import com.newsifier.Logger;
+import com.newsifier.utils.Credentials;
+import com.newsifier.utils.Logger;
 import com.newsifier.watson.bean.Dataset;
 import com.newsifier.watson.bean.SampleDatasetEntry;
 import com.newsifier.watson.bean.SampleTestSetEntry;
@@ -16,6 +16,8 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 
+import static com.newsifier.utils.Utils.getCredentials;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -23,10 +25,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.newsifier.dao.impl.Utils.getCredentials;
-
-public class ClassifierNLC {
-
+/**
+ * Manages the NLC Classifier.
+ */
+public class NLCClassifier {
 
     private static NaturalLanguageClassifier service;
     private static Classifier classifier;
@@ -79,6 +81,9 @@ public class ClassifierNLC {
         }
     }
 
+    /**
+     * Splits the dataset (training/test set) according to the user's decision
+     */
     public Dataset splitDataset(File datasetFile, double trainingDimension) {
 
         StringBuilder trainingSet = new StringBuilder();
@@ -133,7 +138,7 @@ public class ClassifierNLC {
     }
 
 
-    public ClassifierNLC() {
+    public NLCClassifier() {
         JsonObject credentials = getCredentials("natural_language_classifier", Credentials.getUsernameNlc(), Credentials.getPasswordNlc());
         String username = credentials.get("username").getAsString();
         String password = credentials.get("password").getAsString();
@@ -142,6 +147,9 @@ public class ClassifierNLC {
         Logger.log("NLC Service init");
     }
 
+    /**
+     * Tests the performance of a NLC Classifier
+     */
     public List<SampleTestSetEntry> testClassifier(File testSet, String classifierName) {
         try {
             List<String> testSample = FileUtils.readLines(testSet, "UTF-8");
@@ -188,6 +196,9 @@ public class ClassifierNLC {
     }
 
 
+    /**
+     * Calculates the performance of a NLC Classifier
+     */
     public double precisionClassifier(File dataset, List<SampleTestSetEntry> testSetResult) {
 
         List<SampleDatasetEntry> datasetEntries = parseCSV(dataset);
@@ -211,7 +222,7 @@ public class ClassifierNLC {
         Logger.webLog(" True positive: " + tp + " Total: " + tot);
 
         if (tot == 0.0)
-            return 0.0;
+            return tot;
 
         return tp / tot;
     }

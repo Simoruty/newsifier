@@ -9,12 +9,15 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import com.newsifier.Logger;
+import com.newsifier.utils.Logger;
  
+/**
+ * Manages the WebSocket 
+ */
 @ServerEndpoint(value = "/websocket")
 public class WebSocketServer {
  
-	private static Session socketSession;
+	private static Session socketSession; //In this simple scenario only one WebSocket is needed
 	
     @OnOpen
     public void onOpen(Session session) {

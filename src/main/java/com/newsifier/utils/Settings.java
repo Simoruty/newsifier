@@ -1,4 +1,4 @@
-package com.newsifier;
+package com.newsifier.utils;
 
 public class Settings {
 
@@ -16,8 +16,8 @@ public class Settings {
         return limitKeywordsNews;
     }
 
-    // "score" is the threeshold for retrieve the categories
-    // "relevance" is the threeshold for retrieve the keywords
+    // "score" is the threshold to retrieve the categories
+    // "relevance" is the threshold to retrieve the keywords
 
     private double score = 0.5;
     private double relevance = 0.5;
@@ -30,7 +30,7 @@ public class Settings {
         return relevance;
     }
 
-    // Training percent
+    // Training percentage
     private double trainingDimension = 0.7;
 
     public double getTrainingDimension() {

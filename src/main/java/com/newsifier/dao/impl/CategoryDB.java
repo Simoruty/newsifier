@@ -1,14 +1,17 @@
 package com.newsifier.dao.impl;
 
-import com.newsifier.rss.bean.News;
+import com.newsifier.watson.bean.NewsWithKeywords;
 
 import java.util.ArrayList;
 
-public class NewsDB {
-
+/**
+ * Represents a generic category in the DB
+ * For each category there is a set of related news discovered by NLU 
+ */
+public class CategoryDB {
     private String _id;
     private String _rev;
-    private ArrayList<News> news;
+    private ArrayList<NewsWithKeywords> news;
 
     public String getId() {
         return _id;
@@ -22,17 +25,18 @@ public class NewsDB {
         this._rev = _rev;
     }
 
-    public ArrayList<News> getNewslist() {
+    public ArrayList<NewsWithKeywords> getNewslist() {
         return news;
     }
 
-    public void setNews(ArrayList<News> news) {
+    public void setNews(ArrayList<NewsWithKeywords> news) {
         this.news = news;
     }
 
-    public void addNews(News n) {
+    public void addNews(NewsWithKeywords n) {
         if (!news.contains(n)) {
             news.add(n);
         }
     }
+
 }

@@ -1,9 +1,6 @@
 package com.newsifier.controller;
 
 import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException;
-import com.newsifier.Credentials;
-import com.newsifier.Logger;
-import com.newsifier.Settings;
 import com.newsifier.dao.impl.*;
 import com.newsifier.dao.interfaces.CategoriesDAO;
 import com.newsifier.dao.interfaces.DatasetDAO;
@@ -12,10 +9,13 @@ import com.newsifier.dao.interfaces.NewsDAO;
 import com.newsifier.rss.bean.Feed;
 import com.newsifier.rss.bean.News;
 import com.newsifier.rss.reader.RssManager;
+import com.newsifier.utils.Credentials;
+import com.newsifier.utils.Logger;
+import com.newsifier.utils.Settings;
 import com.newsifier.watson.bean.Dataset;
 import com.newsifier.watson.bean.NewsNLU;
 import com.newsifier.watson.bean.SampleTestSetEntry;
-import com.newsifier.watson.reader.ClassifierNLC;
+import com.newsifier.watson.reader.NLCClassifier;
 import com.newsifier.watson.reader.Extractor;
 
 import javax.servlet.AsyncContext;
@@ -32,7 +32,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * This is the main application Servlet 
+ */
 @WebServlet(urlPatterns = "/feed", asyncSupported = true)
 public class FeedController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -56,6 +58,9 @@ public class FeedController extends HttpServlet {
 
     }
 
+    /**
+     * This action starts the asynchronous execution
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String newsLimit = request.getParameter("newslimit");
@@ -77,18 +82,6 @@ public class FeedController extends HttpServlet {
             }
         }
 
-        /*
-        Feed f1 = new Feed("Ansa_Cronaca", new URL("http://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"));
-        Feed f2 = new Feed("Ansa_Politica", new URL("http://www.ansa.it/sito/notizie/politica/politica_rss.xml"));
-        Feed f3 = new Feed("Ansa_Calcio", new URL("http://www.ansa.it/sito/notizie/sport/calcio/calcio_rss.xml"));
-        //RssManager.printNews(f2);
-
-        feedsList.add(f1);
-        feedsList.add(f2);
-        feedsList.add(f3);
-
-        */
-
         final AsyncContext asyncContext = request.startAsync(request, response);
 
         new Thread() {
@@ -104,6 +97,9 @@ public class FeedController extends HttpServlet {
 
     }
 
+    /**
+     * Populates the DB for the Feeds, Categories and News
+     */
     private static NewsDAO creationCloudantFromRss(Settings settings, ArrayList<Feed> feedsList) {
         Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.log(" +++++++++++++++++++ FEED DOCUMENTS CREATION ++++++++++++++++  ");
@@ -134,7 +130,6 @@ public class FeedController extends HttpServlet {
 
 
         // Adding news documents by feed
-        // Set limit news for feed
         NewsDAO cloudantNewsDAO = new CloudantNewsDAO();
 
         for (Feed feed : feedsList) {
@@ -145,6 +140,9 @@ public class FeedController extends HttpServlet {
     }
 
 
+    /**
+     * Calls NLU to retrieve keyword and categories for each news
+     */
     private static String retrieveInfoFromNLU(Settings settings, ArrayList<Feed> feedsList, NewsDAO cloudantNewsDAO) {
         Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.log(" +++++++++++++++++++ NLU EXTRACTION  ++++++++++++++++++++++++  ");
@@ -207,7 +205,9 @@ public class FeedController extends HttpServlet {
         return stringCSV.toString();
     }
 
-
+/**
+ *  Stores the dataset CSV to Object Storage
+ */
     private static void saveDatasetObjectStorage(DatasetDAO datasetDAO, String datasetCSV) {
         Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.log(" +++++++++++++++++++++ OBJECT STORAGE +++++++++++++++++++++++  ");
@@ -222,8 +222,10 @@ public class FeedController extends HttpServlet {
 
     }
 
-
-    private static void creationExecutionNLC(Settings settings, DatasetDAO datasetDAO) {
+    /**
+     * Creates, trains and tests the NLC classifier
+     */
+    private void creationExecutionNLC(Settings settings, DatasetDAO datasetDAO) {
         Logger.log(" \n ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  ");
         Logger.log(" +++++++++++++++++++++++++ NLC ++++++++++++++++++++++++++++++  ");
         Logger.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n ");
@@ -234,7 +236,7 @@ public class FeedController extends HttpServlet {
 
 
         File datasetFile = datasetDAO.getDatasetFile(Credentials.getContainernameObj(), Credentials.getDatasetnameObj());
-        ClassifierNLC classifierNLC = new ClassifierNLC();
+        NLCClassifier classifierNLC = new NLCClassifier();
 
         Dataset dataset = classifierNLC.splitDataset(datasetFile, settings.getTrainingDimension());
 
@@ -274,9 +276,8 @@ public class FeedController extends HttpServlet {
             Logger.webLog("Testing is not available");
         }
     }
-
-
-    private static void execution(Settings settings, ArrayList<Feed> feedsList) {
+    
+    private void execution(Settings settings, ArrayList<Feed> feedsList) {
 
         NewsDAO cloudantNewsDAO = creationCloudantFromRss(settings, feedsList);
 
@@ -300,8 +301,10 @@ public class FeedController extends HttpServlet {
 
     }
 
-
-    private static void eraseAll() {
+    /**
+     * Clears all the data in Cloudant, Object Storage and deletes any existing classifier
+     */
+    private void eraseAll() {
         eraseCloudant();
         eraseObjectStorage();
         eraseNLC();
@@ -318,11 +321,11 @@ public class FeedController extends HttpServlet {
 
     }
 
-    private static void eraseCloudant() {
-        CloudantUtilsDAO.eraseDatabase();
+    private void eraseCloudant() {
+        CloudantDAOUtils.eraseDatabase();
     }
 
-    private static void eraseObjectStorage() {
+    private void eraseObjectStorage() {
         DatasetDAO datasetDAO = new ObjectStorageDatasetDAO();
         datasetDAO.eraseDataset(Credentials.getContainernameObj(), Credentials.getTrainingsetnameObj());
         datasetDAO.eraseDataset(Credentials.getContainernameObj(), Credentials.getTestsetnameObj());
@@ -330,8 +333,8 @@ public class FeedController extends HttpServlet {
         datasetDAO.eraseDataset(Credentials.getContainernameObj());
     }
 
-    private static void eraseNLC() {
-        ClassifierNLC classifierNLC = new ClassifierNLC();
+    private void eraseNLC() {
+        NLCClassifier classifierNLC = new NLCClassifier();
         classifierNLC.eraseClassifier(Credentials.getClassifierName());
     }
 

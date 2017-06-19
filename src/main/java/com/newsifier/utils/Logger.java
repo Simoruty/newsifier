@@ -1,7 +1,11 @@
-package com.newsifier;
+package com.newsifier.utils;
 
 import com.newsifier.controller.WebSocketServer;
 
+/**
+ * This class provides an abstraction for logging.
+ * It allows to logs on STDOUT and a WebSocket.
+ */
 public class Logger {
 
     public static void log(String msg){

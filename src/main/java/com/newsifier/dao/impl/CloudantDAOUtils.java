@@ -5,8 +5,10 @@ import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.newsifier.Credentials;
-import com.newsifier.Logger;
+import com.newsifier.utils.Credentials;
+import com.newsifier.utils.Logger;
+
+import static com.newsifier.utils.Utils.getCredentials;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,9 +18,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import static com.newsifier.dao.impl.Utils.getCredentials;
-
-public class CloudantUtilsDAO {
+/**
+ * Provides methods to manage Cloudant 
+ */
+public class CloudantDAOUtils {
 
     private static Database dbMaster;
     private static Database dbCategories;
@@ -32,6 +35,10 @@ public class CloudantUtilsDAO {
         return dbCategories;
     }
 
+    /**
+     * Reads a document from a Cloudant by ID.
+     * Returns the retrieved document as JsonObject
+     */
     protected static JsonObject jsonObjectreaderFromCloudantId(String id, Database d) {
         JsonObject output;
         InputStream is = d.find(id);
@@ -52,6 +59,9 @@ public class CloudantUtilsDAO {
         return output;
     }
 
+    /**
+     *  Creates and returns an object representing a Cloudant Client
+     */
     private static CloudantClient getCloudantClient() {
         JsonObject credentials = getCredentials("cloudantNoSQLDB", Credentials.getUsernameDbCloudant(), Credentials.getPasswordDbCloudant());
 
@@ -70,7 +80,6 @@ public class CloudantUtilsDAO {
 
         return null;
     }
-
 
     protected static void createConnectionWithCloudant() {
 
@@ -109,7 +118,7 @@ public class CloudantUtilsDAO {
         createConnectionWithCloudant();
         cloudantClient.deleteDB(dbMaster.info().getDbName());
         cloudantClient.deleteDB(dbCategories.info().getDbName());
-        Logger.webLog("Cloudant documents erased");
+        Logger.webLog("\n\nCloudant documents erased");
         Logger.log("Cloudant documents erased");
     }
 }

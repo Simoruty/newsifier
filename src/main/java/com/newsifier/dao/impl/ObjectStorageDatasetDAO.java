@@ -1,9 +1,10 @@
 package com.newsifier.dao.impl;
 
 import com.google.gson.JsonObject;
-import com.newsifier.Credentials;
-import com.newsifier.Logger;
 import com.newsifier.dao.interfaces.DatasetDAO;
+import com.newsifier.utils.Credentials;
+import com.newsifier.utils.Logger;
+
 import org.openstack4j.api.OSClient;
 import org.openstack4j.api.storage.ObjectStorageService;
 import org.openstack4j.model.common.DLPayload;
@@ -12,10 +13,10 @@ import org.openstack4j.model.common.Payload;
 import org.openstack4j.model.storage.object.SwiftObject;
 import org.openstack4j.openstack.OSFactory;
 
+import static com.newsifier.utils.Utils.getCredentials;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-
-import static com.newsifier.dao.impl.Utils.getCredentials;
 
 public class ObjectStorageDatasetDAO implements DatasetDAO {
 
