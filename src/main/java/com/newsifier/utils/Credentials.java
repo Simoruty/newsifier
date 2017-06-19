@@ -4,8 +4,8 @@ public class Credentials {
 
     // natural-language-classifier Credentials
 
-    private static final String USERNAME_NLC = "337aa53b-22de-41f4-910e-d9579ca2e8ab";
-    private static final String PASSWORD_NLC = "iEuycPODP1WS";
+    private static final String USERNAME_NLC = "";
+    private static final String PASSWORD_NLC = "";
 
     private static final String CLASSIFIERNAME = "NLCClassifier";
 
@@ -24,8 +24,8 @@ public class Credentials {
 
     // natural-language-understanding Credentials
 
-    private static final String USERNAME_NLU = "824c475f-f2b4-4282-aa65-3500d113edd9";
-    private static final String PASSWORD_NLU = "HC1kWyLeSr3i";
+    private static final String USERNAME_NLU = "";
+    private static final String PASSWORD_NLU = "";
 
     public static String getUsernameNlu() {
         return USERNAME_NLU;
@@ -36,8 +36,8 @@ public class Credentials {
     }
 
     // Credential Cloudant
-    private static final String USERNAME_DB_CLOUDANT = "5e265712-6c53-481c-8cc6-d9740b8717bc-bluemix";
-    private static final String PASSWORD_DB_CLOUDANT = "96254734f60ef7900917a11c7a2b899091f8e3b28f9468321196d7dcf0627431";
+    private static final String USERNAME_DB_CLOUDANT = "";
+    private static final String PASSWORD_DB_CLOUDANT = "";
 
     public static String getUsernameDbCloudant() {
         return USERNAME_DB_CLOUDANT;
@@ -48,16 +48,16 @@ public class Credentials {
     }
 
     //Credentials Object Storage service
-    private static final String AUTH_URL_OBJ = "https://identity.open.softlayer.com";
-    private static final String PROJECT_OBJ = "object_storage_cd733896_3e33_4ec6_a495_58908ad3f365";
-    private static final String PROJECT_ID_OBJ = "a2c3b32faa5143e09f848413d2251240";
-    private static final String REGION_OBJ = "dallas";
-    private static final String USERID_OBJ = "ee984cbda6854a6c913992399319f1f4";
-    private static final String USERNAME_OBJ = "admin_b1320375b5f42ddd89d4f45248cd9bfcce1d07c2";
-    private static final String PASSWORD_OBJ = "at8HgJO]kj&o8ig(";
-    private static final String DOMAIN_ID_OBJ = "5a5263e2f4554cf395e9d2077ab851c4";
-    private static final String DOMAIN_NAME_OBJ = "786039";
-    private static final String ROLE_OBJ = "admin";
+    private static final String AUTH_URL_OBJ = "";
+    private static final String PROJECT_OBJ = "";
+    private static final String PROJECT_ID_OBJ = "";
+    private static final String REGION_OBJ = "";
+    private static final String USERID_OBJ = "";
+    private static final String USERNAME_OBJ = "";
+    private static final String PASSWORD_OBJ = "";
+    private static final String DOMAIN_ID_OBJ = "";
+    private static final String DOMAIN_NAME_OBJ = "";
+    private static final String ROLE_OBJ = "";
     
     private static final String CONTAINERNAMEOBJ = "filesDataset";
     private static final String DATASETNAMEOBJ = "dataset.csv";
