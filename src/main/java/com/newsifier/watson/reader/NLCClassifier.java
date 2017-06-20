@@ -9,8 +9,8 @@ import com.ibm.watson.developer_cloud.service.exception.BadRequestException;
 import com.newsifier.utils.Credentials;
 import com.newsifier.utils.Logger;
 import com.newsifier.watson.bean.Dataset;
-import com.newsifier.watson.bean.SampleDatasetEntry;
-import com.newsifier.watson.bean.SampleTestSetEntry;
+import com.newsifier.watson.bean.DatasetEntry;
+import com.newsifier.watson.bean.TestResultsetEntry;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -89,7 +89,7 @@ public class NLCClassifier {
         StringBuilder trainingSet = new StringBuilder();
         StringBuilder testSet = new StringBuilder();
 
-        List<SampleDatasetEntry> datasetEntries = parseCSV(datasetFile);
+        List<DatasetEntry> datasetEntries = parseCSV(datasetFile);
 
         int numberSampleLimit = (int) (datasetEntries.size() * trainingDimension);
 
@@ -116,16 +116,16 @@ public class NLCClassifier {
 
     }
 
-    private static List<SampleDatasetEntry> parseCSV(File file) {
+    private static List<DatasetEntry> parseCSV(File file) {
 
-        List<SampleDatasetEntry> datasets = new ArrayList<>();
+        List<DatasetEntry> datasets = new ArrayList<>();
         CSVParser parser;
         try {
             parser = new CSVParser(new FileReader(file), CSVFormat.DEFAULT.withAllowMissingColumnNames());
 
             for (CSVRecord record : parser) {
-                SampleDatasetEntry sampleDatasetEntry = new SampleDatasetEntry(record.get(1), record.get(0));
-                datasets.add(sampleDatasetEntry);
+                DatasetEntry datasetEntry = new DatasetEntry(record.get(1), record.get(0));
+                datasets.add(datasetEntry);
                 //System.out.printf("%s\t%s", record.get(1), record.get(0));
             }
             parser.close();
@@ -150,11 +150,11 @@ public class NLCClassifier {
     /**
      * Tests the performance of a NLC Classifier
      */
-    public List<SampleTestSetEntry> testClassifier(File testSet, String classifierName) {
+    public List<TestResultsetEntry> testClassifier(File testSetFile, String classifierName) {
         try {
-            List<String> testSample = FileUtils.readLines(testSet, "UTF-8");
+            List<String> testSetList = FileUtils.readLines(testSetFile, "UTF-8");
 
-            List<SampleTestSetEntry> testSetEntries = new ArrayList<>(testSample.size());
+            List<TestResultsetEntry> testSetEntries = new ArrayList<>(testSetList.size());
 
             String classifierId = getClassifierId(classifierName);
 
@@ -165,9 +165,9 @@ public class NLCClassifier {
             boolean success = false;
             while (!success) {
                 try {
-                    for (String sample : testSample) {
+                    for (String sample : testSetList) {
                         Classification classification = service.classify(classifierId, sample).execute();
-                        SampleTestSetEntry setEntry = new SampleTestSetEntry(sample, classification.getTopClass(), classification.getClasses().get(0).getConfidence());
+                        TestResultsetEntry setEntry = new TestResultsetEntry(sample, classification.getTopClass(), classification.getClasses().get(0).getConfidence());
                         testSetEntries.add(setEntry);
 
                     }
@@ -199,17 +199,17 @@ public class NLCClassifier {
     /**
      * Calculates the performance of a NLC Classifier
      */
-    public double precisionClassifier(File dataset, List<SampleTestSetEntry> testSetResult) {
+    public double precisionClassifier(File dataset, List<TestResultsetEntry> testSetResult) {
 
-        List<SampleDatasetEntry> datasetEntries = parseCSV(dataset);
+        List<DatasetEntry> datasetEntries = parseCSV(dataset);
 
         // True Positive
         double tp = 0.0;
         double tot = 0.0;
 
-        for (SampleTestSetEntry setEntry : testSetResult) {
+        for (TestResultsetEntry setEntry : testSetResult) {
             tot++;
-            for (SampleDatasetEntry datasetEntry : datasetEntries) {
+            for (DatasetEntry datasetEntry : datasetEntries) {
                 if (datasetEntry.getKeywords().equals(setEntry.getKeywords()) &&
                         datasetEntry.getCategory().equals(setEntry.getClassificatedClass())) {
                     tp++;

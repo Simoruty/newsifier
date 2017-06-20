@@ -14,7 +14,7 @@ import com.newsifier.utils.Logger;
 import com.newsifier.utils.Settings;
 import com.newsifier.watson.bean.Dataset;
 import com.newsifier.watson.bean.NewsNLU;
-import com.newsifier.watson.bean.SampleTestSetEntry;
+import com.newsifier.watson.bean.TestResultsetEntry;
 import com.newsifier.watson.reader.NLCClassifier;
 import com.newsifier.watson.reader.Extractor;
 
@@ -261,7 +261,7 @@ public class FeedController extends HttpServlet {
         Logger.webLog(" \n------------------ Classifier Testing --------------------  ");
 
         File testFile = datasetDAO.getDatasetFile(Credentials.getContainernameObj(), Credentials.getTestsetnameObj());
-        List<SampleTestSetEntry> testSetEntries = classifierNLC.testClassifier(testFile, Credentials.getClassifierName());
+        List<TestResultsetEntry> testSetEntries = classifierNLC.testClassifier(testFile, Credentials.getClassifierName());
 
         if (testSetEntries != null) {
             Logger.log(" \n------------------- Performance --------------------------  ");

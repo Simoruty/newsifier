@@ -1,14 +1,14 @@
 package com.newsifier.watson.bean;
 
 /**
- * Represent a test set entry
+ * Represent a test result set entry
  */
-public class SampleTestSetEntry {
+public class TestResultsetEntry {
     private String keywords;
     private String classificatedClass;
     private double scoreClassification;
 
-    public SampleTestSetEntry(String keywords, String classificatedClass, double scoreClassification) {
+    public TestResultsetEntry(String keywords, String classificatedClass, double scoreClassification) {
         this.keywords = keywords;
         this.classificatedClass = classificatedClass;
         this.scoreClassification = scoreClassification;
@@ -28,7 +28,7 @@ public class SampleTestSetEntry {
 
     @Override
     public String toString() {
-        return "SampleTestSetEntry{" +
+        return "TestResultsetEntry{" +
                 "keywords='" + keywords + '\'' +
                 ", classificatedClass='" + classificatedClass + '\'' +
                 ", scoreClassification=" + scoreClassification +
