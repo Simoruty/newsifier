@@ -59,6 +59,13 @@ cf push -p <exported_application.war>
 
 Or see [here](https://console.bluemix.net/docs/runtimes/liberty/optionsForPushing.html#options_for_pushing) other options for pushing Liberty applications on Bluemix.
 
+## Deployment
+
+#### Running the application
+```
+http://<host>:<port>/newsifier
+```
+
 ## Authors
 
 * **Simone Rutigliano** - *Software Engineer* - [LinkedIn](https://www.linkedin.com/in/simonerutigliano/)
