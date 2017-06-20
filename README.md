@@ -12,11 +12,11 @@ Application that uses IBM Watson services to create, train and test a Classifier
 ## How it works
 
 1. Sources: generic news RSS feeds provided by the user
-* Extraction of keywords and categories for each news using Watson NLU
-* Dataset persisted on Object Storage
-* Creation of a NLC using the generated dataset
-* Training of the classifier
-* Testing the classifier using _Leave-p-out cross-validation_ 
+2. Extraction of keywords and categories for each news using Watson NLU
+3. Dataset persisted on Object Storage
+4. Creation of a NLC using the generated dataset
+5. Training of the classifier
+6. Testing the classifier using _Leave-p-out cross-validation_ 
 
 
 ## Prerequisites
