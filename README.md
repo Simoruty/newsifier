@@ -67,4 +67,4 @@ http://<host>:<port>/newsifier
 ## Authors
 
 * **Simone Rutigliano** - *Software Engineer* - [LinkedIn](https://www.linkedin.com/in/simonerutigliano/)
-* **Umberto Manganiello** - *Software Engineer* - [LinkedIn](www.linkedin.com/in/umanganiello)
+* **Umberto Manganiello** - *Software Engineer* - [LinkedIn](https://www.linkedin.com/in/umanganiello)
