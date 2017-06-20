@@ -1,6 +1,23 @@
 # Newsifier
 
-Bluemix+Watson Lab
+Application that uses IBM Watson services to create, train and test a Classifier of news.
+
+## Bluemix Services used
+
+* [Cloudant NoSQL DB](https://console.bluemix.net/catalog/services/cloudant-nosql-db)
+* [Object Storage](https://console.bluemix.net/catalog/services/object-storage)
+* [Watson Natural Language Understanding (NLU)](https://console.bluemix.net/catalog/services/natural-language-understanding)
+* [Watson Natural Language Classifier (NLC)](https://console.bluemix.net/catalog/services/natural-language-classifier)
+    
+## How it works
+
+1. Sources: generic news RSS feeds provided by the user
+* Extraction of keywords and categories for each news using Watson NLU
+* Dataset persisted on Object Storage
+* Creation of a NLC using the generated dataset
+* Training of the classifier
+* Testing the classifier using _Leave-p-out cross-validation_ 
+
 
 ## Prerequisites
 
