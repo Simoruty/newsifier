@@ -1,6 +1,6 @@
 # Newsifier
 
-Application that uses IBM Watson services to create, train and test a NLC Classifier of news.
+Application that uses IBM Watson services to create, train and test a NLC Classifier of news
 
 ## Bluemix Services used
 
@@ -48,7 +48,7 @@ Add the credentials for your Bluemix services in _com.newsifier.utils.Credential
 
 * Export the application .war file
 
-* Add your services to the manifest.yml
+* Add your services to the _manifest.yml_
 
 * Run the following command from the manifest directory
 
@@ -57,7 +57,7 @@ Add the credentials for your Bluemix services in _com.newsifier.utils.Credential
 cf push -p <exported_application.war>
 ```
 
-Or see [here](https://console.bluemix.net/docs/runtimes/liberty/optionsForPushing.html#options_for_pushing) other options for pushing Liberty applications on Bluemix.
+Or see [here](https://console.bluemix.net/docs/runtimes/liberty/optionsForPushing.html#options_for_pushing) other options for pushing Liberty applications on Bluemix
 
 ## Running the application
 ```
