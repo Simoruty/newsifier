@@ -40,11 +40,11 @@ Application that uses IBM Watson services to create, train and test a NLC Classi
 
 ## Deployment
 
-### Local machine
+#### Local machine
 
 Add the credentials for your Bluemix services in _com.newsifier.utils.Credentials_
 
-### On Bluemix
+#### On Bluemix
 
 * Export the application .war file
 
