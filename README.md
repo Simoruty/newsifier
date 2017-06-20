@@ -4,10 +4,10 @@ Application that uses IBM Watson services to create, train and test a NLC Classi
 
 ## Bluemix Services used
 
-* [Cloudant NoSQL DB](https://console.bluemix.net/catalog/services/cloudant-nosql-db)
-* [Object Storage](https://console.bluemix.net/catalog/services/object-storage)
-* [Watson Natural Language Understanding (NLU)](https://console.bluemix.net/catalog/services/natural-language-understanding)
-* [Watson Natural Language Classifier (NLC)](https://console.bluemix.net/catalog/services/natural-language-classifier)
+* [Cloudant NoSQL DB](https://console.bluemix.net/docs/services/Cloudant/getting-started.html#getting-started-with-cloudant)
+* [Object Storage](https://console.bluemix.net/docs/services/ObjectStorage/index.html)
+* [Watson Natural Language Understanding (NLU)](https://www.ibm.com/watson/developercloud/doc/natural-language-understanding)
+* [Watson Natural Language Classifier (NLC)](https://console.bluemix.net/docs/services/natural-language-classifier/getting-started.html#natural-language-classifier)
     
 ## How it works
 
