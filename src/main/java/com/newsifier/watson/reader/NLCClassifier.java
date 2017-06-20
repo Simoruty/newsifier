@@ -199,7 +199,7 @@ public class NLCClassifier {
     /**
      * Calculates the performance of a NLC Classifier
      */
-    public double precisionClassifier(File dataset, List<TestResultsetEntry> testSetResult) {
+    public double precisionClassifier(File dataset, List<TestResultsetEntry> testResultset) {
 
         List<DatasetEntry> datasetEntries = parseCSV(dataset);
 
@@ -207,11 +207,11 @@ public class NLCClassifier {
         double tp = 0.0;
         double tot = 0.0;
 
-        for (TestResultsetEntry setEntry : testSetResult) {
+        for (TestResultsetEntry resultsetEntry : testResultset) {
             tot++;
             for (DatasetEntry datasetEntry : datasetEntries) {
-                if (datasetEntry.getKeywords().equals(setEntry.getKeywords()) &&
-                        datasetEntry.getCategory().equals(setEntry.getClassificatedClass())) {
+                if (datasetEntry.getKeywords().equals(resultsetEntry.getKeywords()) &&
+                        datasetEntry.getCategory().equals(resultsetEntry.getClassificatedClass())) {
                     tp++;
                     break;
                 }
