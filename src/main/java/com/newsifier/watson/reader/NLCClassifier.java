@@ -167,8 +167,8 @@ public class NLCClassifier {
                 try {
                     for (String sample : testSetList) {
                         Classification classification = service.classify(classifierId, sample).execute();
-                        TestResultsetEntry setEntry = new TestResultsetEntry(sample, classification.getTopClass(), classification.getClasses().get(0).getConfidence());
-                        testResultsetEntries.add(setEntry);
+                        TestResultsetEntry resultsetEntry = new TestResultsetEntry(sample, classification.getTopClass(), classification.getClasses().get(0).getConfidence());
+                        testResultsetEntries.add(resultsetEntry);
 
                     }
                     Logger.webLog("The classifier is ready");
