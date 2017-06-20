@@ -154,7 +154,7 @@ public class NLCClassifier {
         try {
             List<String> testSetList = FileUtils.readLines(testSetFile, "UTF-8");
 
-            List<TestResultsetEntry> testSetEntries = new ArrayList<>(testSetList.size());
+            List<TestResultsetEntry> testResultsetEntries = new ArrayList<>(testSetList.size());
 
             String classifierId = getClassifierId(classifierName);
 
@@ -168,7 +168,7 @@ public class NLCClassifier {
                     for (String sample : testSetList) {
                         Classification classification = service.classify(classifierId, sample).execute();
                         TestResultsetEntry setEntry = new TestResultsetEntry(sample, classification.getTopClass(), classification.getClasses().get(0).getConfidence());
-                        testSetEntries.add(setEntry);
+                        testResultsetEntries.add(setEntry);
 
                     }
                     Logger.webLog("The classifier is ready");
@@ -187,7 +187,7 @@ public class NLCClassifier {
                     return null;
                 }
             }
-            return testSetEntries;
+            return testResultsetEntries;
 
         } catch (IOException e) {
             e.printStackTrace();
