@@ -1,7 +1,7 @@
 applications:
 - memory: 512M
   instances: 1
-  domain: eu-gb.mybluemix.net
+  domain: mybluemix.net
   name: newsifier
   host: newsifier
   disk_quota: 1024M
