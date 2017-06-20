@@ -54,7 +54,7 @@ Add the credentials for your Bluemix services in _com.newsifier.utils.Credential
 
     
 ```
-cf push -p <exported_application.war>
+cf push -p <exported_application.war> <app_name>
 ```
 
 Or see [here](https://console.bluemix.net/docs/runtimes/liberty/optionsForPushing.html#options_for_pushing) other options for pushing Liberty applications on Bluemix
