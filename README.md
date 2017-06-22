@@ -18,6 +18,7 @@ Application that uses IBM Watson services to create, train and test a NLC Classi
 5. Classifier training
 6. Testing the classifier using _Leave-p-out cross-validation_ 
 
+<img src="NewsifierArchitecture.png" alt="Newsifier Architecture" width="941px" height="529px">
 
 ## Prerequisites
 
