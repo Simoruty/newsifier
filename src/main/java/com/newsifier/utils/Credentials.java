@@ -59,26 +59,41 @@ public class Credentials {
     private static final String DOMAIN_NAME_OBJ = "";
     private static final String ROLE_OBJ = "";
     
-    private static final String CONTAINERNAMEOBJ = "filesDataset";
-    private static final String DATASETNAMEOBJ = "dataset.csv";
-    private static final String TRAININGSETNAMEOBJ = "trainingSet.csv";
+    private static String containerNameObj = "filesDataset";
+    private static String datasetNameObj = "dataset.csv";
+    private static String trainingsetNameObj = "trainingSet.csv";
+    private static String testsetNameObj = "testSet.csv";
 
-    private static final String TESTSETNAMEOBJ = "testSet.csv";
+    public static void setContainerNameObj(String containerNameObj) {
+        Credentials.containerNameObj = containerNameObj;
+    }
+
+    public static void setDatasetNameObj(String datasetNameObj) {
+        Credentials.datasetNameObj = datasetNameObj;
+    }
+
+    public static void setTrainingsetNameObj(String trainingsetNameObj) {
+        Credentials.trainingsetNameObj = trainingsetNameObj;
+    }
+
+    public static void setTestsetNameObj(String testsetNameObj) {
+        Credentials.testsetNameObj = testsetNameObj;
+    }
 
     public static String getTestsetnameObj() {
-        return TESTSETNAMEOBJ;
+        return testsetNameObj;
     }
 
     public static String getTrainingsetnameObj() {
-        return TRAININGSETNAMEOBJ;
+        return trainingsetNameObj;
     }
 
     public static String getDatasetnameObj() {
-        return DATASETNAMEOBJ;
+        return datasetNameObj;
     }
 
     public static String getContainernameObj() {
-        return CONTAINERNAMEOBJ;
+        return containerNameObj;
     }
 
     public static String getUseridObj() {

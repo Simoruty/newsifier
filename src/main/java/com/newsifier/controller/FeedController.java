@@ -223,6 +223,15 @@ public class FeedController extends HttpServlet {
     }
 
     /**
+     * Creates, trains and tests the NLC classifier using a specific container and file object
+     */
+    private void creationExecutionNLC(Settings settings,DatasetDAO datasetDAO, String containerNameObj, String datasetNameObj) {
+        Credentials.setContainerNameObj(containerNameObj);
+        Credentials.setDatasetNameObj(datasetNameObj);
+        creationExecutionNLC(settings, datasetDAO);
+    }
+
+    /**
      * Creates, trains and tests the NLC classifier
      */
     private void creationExecutionNLC(Settings settings, DatasetDAO datasetDAO) {
